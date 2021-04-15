@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ObmenKnigami_Java</string>
 
+    <!-- Menu Drawer Strings -->
     <string name="Different_types_of_books">Жанры литературы</string>
     <string name="a_science_book">научная литература</string>
     <string name="a_humorous_story">комедия</string>
@@ -40,5 +41,40 @@
 
     <string name="open">Open</string>
     <string name="close">Close</string>
+
+    <string name="not_reg">Войдите или зарегестрируйтесь!</string>
+
+    <!-- Sign Dialog -->
+    <string name="email_reset_password_was_sent">Reset Email</string>
+    <string name="dialog_reset_email_message">Для востановления пароля укажите ваш Email адресс!</string>
+
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_up_action">Зарегистрироваться</string>
+    <string name="sign_in_action">Войти</string>
+    <string name="forget_password">Забыли пароль</string>
+    <string name="sign_up_error">Неудалось зарегестрироваться</string>
+    <string name="sign_in_error">Неудалось войти</string>
+    <string name="send_verification_email_error">Неудалось отправить email для потверждения!</string>
+    <string name="send_verification_done">На вашу почту была отправленна ссылка для подтверждения вашего аккаунта, пожалуйста подтвердите ваш аккаунт!</string>
+
+    <!-- Sign Dialog -->
+    <string name="link_is_done">Email успешно подключен к Google аккаунту!</string>
+    <string name="enter_to_g">У вас уже есть аккаунт с этим Email адресом </string>
+    <!-- Edit Activity -->
+    <string name="select_country">*Выберите страну</string>
+    <string name="select_city">*Выберите город</string>
+
+    <!-- Edit Activity -->
+    <string name="Main_photo"></string>
+    <string name="Second_photo"></string>
+    <string name="Third_photo"></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_book_name">Название книги</string>
+    <string name="edit_discription">Описание</string>
+    <string name="edit_phone">Как с вами связаться</string>
+
+
 
 </resources>
