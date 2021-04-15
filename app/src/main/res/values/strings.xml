@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">ObmenKnigami_Java</string>
+
+    <string name="Different_types_of_books">Жанры литературы</string>
+    <string name="a_science_book">научная литература</string>
+    <string name="a_humorous_story">комедия</string>
+    <string name="a_romance">романтика</string>
+    <string name="a_detective_story">детектив</string>
+    <string name="an_adventure_novel">приключения</string>
+    <string name="a_fiction_book">фантастика</string>
+    <string name="a_science_fiction_book">научная фантастика</string>
+    <string name="a_drama">драма</string>
+    <string name="a_psychology">психология</string>
+    <string name="a_horror_story">ужасы</string>
+    <string name="a_fairy_tale">детская литература</string>
+    <string name="a_war_novel">боевик</string>
+    <string name="a_historical_novel">история</string>
+    <string name="an_autobiography">автобиография</string>
+    <string name="a_biography">биография</string>
+    <string name="a_sport">спорт</string>
+    <string name="a_classic">классика</string>
+
+    <string name="school_textbooks">Учебники для школы</string>
+    <string name="textbooks_for_the_1st_grade">учебники за 1 класс</string>
+    <string name="textbooks_for_the_2nd_grade">учебники за 2 класс</string>
+    <string name="textbooks_for_the_3rd_grade">учебники за 3 класс</string>
+    <string name="textbooks_for_the_4th_grade">учебники за 4 класс</string>
+    <string name="textbooks_for_the_5th_grade">учебники за 5 класс</string>
+    <string name="textbooks_for_the_6th_grade">учебники за 6 класс</string>
+    <string name="textbooks_for_the_7th_grade">учебники за 7 класс</string>
+    <string name="textbooks_for_the_8th_grade">учебники за 8 класс</string>
+    <string name="textbooks_for_the_9th_grade">учебники за 9 класс</string>
+    <string name="textbooks_for_the_10th_grade">учебники за 10 класс</string>
+    <string name="textbooks_for_the_11th_grade">учебники за 11 класс</string>
+
+    <string name="ac">Аккаунт</string>
+    <string name="ac_sign_up">Регистрация</string>
+    <string name="ac_sign_in">Вход</string>
+    <string name="ac_sign_out">Выход</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+</resources>
