@@ -2,10 +2,201 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <group android:checkableBehavior="single">
-        <item android:title=""
-    </group>
 
 
+
+    <item android:title="@string/school_textbooks">
+        <menu>
+            <item
+                android:title="@string/textbooks_for_the_1st_grade"
+                android:id="@+id/id_textbooks_for_the_1st_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+
+            <item
+                android:title="@string/textbooks_for_the_2nd_grade"
+                android:id="@+id/id_textbooks_for_the_2nd_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+
+            <item
+                android:title="@string/textbooks_for_the_3rd_grade"
+                android:id="@+id/id_textbooks_for_the_3rd_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_4th_grade"
+                android:id="@+id/id_textbooks_for_the_4th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_5th_grade"
+                android:id="@+id/id_textbooks_for_the_5th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_6th_grade"
+                android:id="@+id/id_textbooks_for_the_6th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_7th_grade"
+                android:id="@+id/id_textbooks_for_the_7th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_8th_grade"
+                android:id="@+id/id_textbooks_for_the_8th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_9th_grade"
+                android:id="@+id/id_textbooks_for_the_9th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_10th_grade"
+                android:id="@+id/id_textbooks_for_the_10th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+            <item
+                android:title="@string/textbooks_for_the_11th_grade"
+                android:id="@+id/id_textbooks_for_the_11th_grade"
+                android:icon="@drawable/ic_my_school_books"
+                />
+
+        </menu>
+    </item>
+
+    <item android:title="@string/Different_types_of_books">
+        <menu>
+            <item
+                android:title="@string/a_science_book"
+                android:id="@+id/id_a_science_book"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_humorous_story"
+                android:id="@+id/id_a_humorous_story"
+                android:icon="@drawable/ic_my_books"
+
+                />
+
+            <item
+                android:title="@string/a_romance"
+                android:id="@+id/id_a_romance"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_detective_story"
+                android:id="@+id/id_a_detective_story"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/an_adventure_novel"
+                android:id="@+id/id_an_adventure_novel"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_fiction_book"
+                android:id="@+id/id_a_fiction_book"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_science_fiction_book"
+                android:id="@+id/id_a_science_fiction_book"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_drama"
+                android:id="@+id/id_a_drama"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_psychology"
+                android:id="@+id/id_a_psychologyt"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_horror_story"
+                android:id="@+id/id_a_horror_story"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_fairy_tale"
+                android:id="@+id/id_a_fairy_tale"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_war_novel"
+                android:id="@+id/id_a_war_novel"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_historical_novel"
+                android:id="@+id/id_a_historical_novel"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/an_autobiography"
+                android:id="@+id/id_an_autobiography"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_biography"
+                android:id="@+id/id_a_biography"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_sport"
+                android:id="@+id/id_a_sport"
+                android:icon="@drawable/ic_my_books"
+                />
+
+            <item
+                android:title="@string/a_classic"
+                android:id="@+id/id_a_classic"
+                android:icon="@drawable/ic_my_books"
+                />
+
+        </menu>
+    </item>
+
+    <item android:title="@string/ac"
+        >
+        <menu>
+            <item
+                android:title="@string/ac_sign_up"
+                android:id="@+id/id_sign_up"
+                android:icon="@drawable/ic_sign_up"
+                />
+
+            <item
+                android:title="@string/ac_sign_in"
+                android:id="@+id/id_sign_in"
+                android:icon="@drawable/ic_sign_in"
+                />
+
+            <item
+                android:title="@string/ac_sign_out"
+                android:id="@+id/id_sign_out"
+                android:icon="@drawable/ic_sign_out"
+                />
+        </menu>
+    </item>
 
 </menu>
