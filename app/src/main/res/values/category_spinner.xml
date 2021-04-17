@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="category_spinner">
+        <item>научная литература</item>
+        <item>комедия</item>
+        <item>романтика</item>
+        <item>детектив</item>
+        <item>приключения</item>
+        <item>фантастика</item>
+        <item>научная фантастика</item>
+        <item>драма</item>
+        <item>психология</item>
+        <item>ужасы</item>
+        <item>детская литература</item>
+        <item>боевик</item>
+        <item>история</item>
+        <item>автобиография</item>
+        <item>биография</item>
+        <item>спорт</item>
+        <item>классика</item>
+        <item></item>
+    </string-array>
+    
+</resources>

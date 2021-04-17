@@ -3,6 +3,8 @@ package com.sad_ballala_projects.obmenknigami_java;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -25,7 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
+    private DrawerLayout drawerLayout;
     private NavigationView nav_view;
     private FirebaseAuth mAuth;
     private TextView userEmail;
@@ -57,9 +59,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void init()
     {
+
         nav_view = findViewById(R.id.nav_view);
+        drawerLayout = findViewById(R.id.drawerLayout);
         nav_view.setNavigationItemSelectedListener(this);
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
+        drawerLayout.openDrawer(GravityCompat.START);
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
