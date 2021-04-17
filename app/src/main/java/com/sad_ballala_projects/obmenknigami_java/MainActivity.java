@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private NavigationView nav_view;
     private FirebaseAuth mAuth;
+    private TextView userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +41,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        getUserData();
         
+    }
+
+    private void getUserData(){
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            userEmail.setText(currentUser.getEmail());
+        } else {
+            userEmail.setText(R.string.not_reg);
+        }
     }
 
     private void init()
     {
         nav_view = findViewById(R.id.nav_view);
         nav_view.setNavigationItemSelectedListener(this);
-
+        userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -173,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.id_sign_out:
-
+                signOut();
                 break;
         }
         return true;
@@ -214,12 +224,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             if (task.isSuccessful()) {
 
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if(user != null){
-                                    Toast.makeText(getApplicationContext(), "SignUP done... user email:" + user.getEmail(),
-                                            Toast.LENGTH_SHORT).show();
-
-                                Log.d("MyLog", "createUserWithEmail:success" + user.getEmail());}
+                                getUserData();
 
                             } else {
                                 Log.w("MyLog", "createUserWithEmail:failure", task.getException());
@@ -243,12 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Log.d("MyLog", "signInWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null) {
-                                    Toast.makeText(getApplicationContext(), "SignIn done... user email:" + user.getEmail(),
-                                            Toast.LENGTH_LONG).show();
-                                }
+                                getUserData();
+
                             } else {
                                 Log.w("MyLog", "signInWithEmail:failure", task.getException());
                                 Toast.makeText(getApplicationContext(), "Authentication failed.",
@@ -261,6 +262,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "Email or Password is empty", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void signOut(){
+        mAuth.signOut();
+        getUserData();
+    }
+
 
 
 
