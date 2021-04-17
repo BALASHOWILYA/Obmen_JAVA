@@ -51,6 +51,7 @@ public class EditActivity extends AppCompatActivity {
                 R.array.category_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.getSelectedItem();
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
         imItem = findViewById(R.id.imItem);
     }
@@ -93,6 +94,10 @@ public class EditActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void onClickSavePost(View View){
+
     }
 
 
