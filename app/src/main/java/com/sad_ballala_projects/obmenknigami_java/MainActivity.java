@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+       // DatabaseReference myRef = database.getReference("message");
 
-        myRef.setValue("Hello, World!");
+       // myRef.setValue("Hello, World!");
 
     }
 
