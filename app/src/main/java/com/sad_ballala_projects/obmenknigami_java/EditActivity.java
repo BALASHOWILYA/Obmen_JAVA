@@ -52,7 +52,7 @@ public class EditActivity extends AppCompatActivity {
 
     private void init(){
 
-        edTitle = findViewById(R.id.edTel);
+        edTitle = findViewById(R.id.edTitle);
         edTel = findViewById(R.id.edTel);
         edDisc = findViewById(R.id.edDisc);
 
