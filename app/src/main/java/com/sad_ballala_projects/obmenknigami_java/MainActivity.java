@@ -195,6 +195,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 if(index == 0){
                     signUp(edEmail.getText().toString(),edPassword.getText().toString());
+                } else{
+                    signIn(edEmail.getText().toString(), edPassword.getText().toString());
                 }
             }
         });
@@ -213,7 +215,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (task.isSuccessful()) {
 
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                if(user != null) Log.d("MyLog", "createUserWithEmail:success" + user.getEmail());
+                                if(user != null){
+                                    Toast.makeText(getApplicationContext(), "SignUP done... user email:" + user.getEmail(),
+                                            Toast.LENGTH_SHORT).show();
+
+                                Log.d("MyLog", "createUserWithEmail:success" + user.getEmail());}
 
                             } else {
                                 Log.w("MyLog", "createUserWithEmail:failure", task.getException());
@@ -228,6 +234,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void signIn(String email, String password) {
+        if (!email.equals("") && !password.equals("")) {
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("MyLog", "signInWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    Toast.makeText(getApplicationContext(), "SignIn done... user email:" + user.getEmail(),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Log.w("MyLog", "signInWithEmail:failure", task.getException());
+                                Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        }
+        else{
+            Toast.makeText(this, "Email or Password is empty", Toast.LENGTH_LONG).show();
+        }
     }
 
 
