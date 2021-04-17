@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView nav_view;
     private FirebaseAuth mAuth;
     private TextView userEmail;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,18 +201,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         EditText edEmail = dialogView.findViewById(R.id.edEmail);
         EditText edPassword = dialogView.findViewById(R.id.edPassword);
         b.setText(buttonTitle);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        b.setOnClickListener((v) ->{
+
                 if(index == 0){
                     signUp(edEmail.getText().toString(),edPassword.getText().toString());
                 } else{
                     signIn(edEmail.getText().toString(), edPassword.getText().toString());
                 }
-            }
+                dialog.dismiss();
         });
-        AlertDialog dialog = dialogBuilder.create();
+        dialog = dialogBuilder.create();
         dialog.show();
+
 
 
     }
