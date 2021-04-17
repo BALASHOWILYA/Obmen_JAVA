@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "969546345574",
+    "project_id": "obmenjava",
+    "storage_bucket": "obmenjava.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969546345574:android:86d4e5a10185da4dd391a7",
+        "android_client_info": {
+          "package_name": "com.sad_ballala_projects.obmenknigami_java"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969546345574-prq7iqbcahihs3do8o84kbsq5toplv1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHPdv_m7mdcc70Zs3CMzIGZkubqzMIT28"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969546345574-prq7iqbcahihs3do8o84kbsq5toplv1h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
