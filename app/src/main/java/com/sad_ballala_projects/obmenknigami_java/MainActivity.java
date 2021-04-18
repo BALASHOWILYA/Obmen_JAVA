@@ -1,8 +1,10 @@
 package com.sad_ballala_projects.obmenknigami_java;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth mAuth;
     private TextView userEmail;
     private AlertDialog dialog;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         nav_view = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawerLayout);
+        toolbar = findViewById(R.id.toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.toggle_open, R.string.toggle_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
         nav_view.setNavigationItemSelectedListener(this);
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
         drawerLayout.openDrawer(GravityCompat.START);

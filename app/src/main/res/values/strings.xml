@@ -39,8 +39,8 @@
     <string name="ac_sign_in">Вход</string>
     <string name="ac_sign_out">Выход</string>
 
-    <string name="open">Open</string>
-    <string name="close">Close</string>
+    <string name="toggle_open">Open</string>
+    <string name="toggle_close">Close</string>
 
     <string name="not_reg">Войдите или зарегестрируйтесь!</string>
 
@@ -74,6 +74,8 @@
     <string name="edit_book_name">Название книги</string>
     <string name="edit_discription">Описание</string>
     <string name="edit_phone">Как с вами связаться</string>
+
+
 
 
 
