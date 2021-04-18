@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView userEmail;
     private AlertDialog dialog;
     private Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         
     }
 
+    public void onClickEdit(View View){
+        Intent i = new Intent(MainActivity.this, EditActivity.class);
+        startActivity(i);
+    }
+
     private void getUserData(){
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
@@ -64,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void init()
     {
 
+
         nav_view = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawerLayout);
         toolbar = findViewById(R.id.toolbar);
@@ -73,10 +82,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         nav_view.setNavigationItemSelectedListener(this);
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
-        drawerLayout.openDrawer(GravityCompat.START);
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        // Write a message to the database
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+
        // DatabaseReference myRef = database.getReference("message");
 
        // myRef.setValue("Hello, World!");
