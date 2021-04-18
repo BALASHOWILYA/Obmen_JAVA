@@ -133,14 +133,18 @@ public class EditActivity extends AppCompatActivity {
             String key = dRef.push().getKey();
             NewPost post = new NewPost();
 
+
             post.setImageId(uploadUri.toString());
             post.setTitle(edTitle.getText().toString());
             post.setChange(edChange.getText().toString());
             post.setTel(edTel.getText().toString());
             post.setDisc(edDisc.getText().toString());
             post.setKey(key);
+            post.setTime(String.valueOf(System.nanoTime()));
+            post.setUid(mAuth.getUid());
+
             // создаем новую подпапку, название папки зависит от Uid, далее создается объявление с помощью key, а затем помещаем туда значение
-            if(key != null)dRef.child(mAuth.getUid()).child(key).setValue(post);
+            if(key != null)dRef.child(key).child("ads").setValue(post);
 
         }
     }

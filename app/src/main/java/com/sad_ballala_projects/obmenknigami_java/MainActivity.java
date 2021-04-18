@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -30,6 +32,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sad_ballala_projects.obmenknigami_java.adapter.PostAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
@@ -38,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView userEmail;
     private AlertDialog dialog;
     private Toolbar toolbar;
+    private PostAdapter.OnItemClickCustom onItemClickCustom;
+    private RecyclerView rcView;
+    private PostAdapter postAdapter;
 
 
     @Override
@@ -46,6 +55,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         init();
     }
+
+    private void setOnItemClickCustom(){
+        onItemClickCustom = new PostAdapter.OnItemClickCustom() {
+            @Override
+            public void onItemSelected(int position) {
+                Log.d("MyLog", "Position : " + position);
+            }
+        };
+    }
+
 
     @Override
     public void onStart() {
@@ -71,6 +90,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void init()
     {
+        setOnItemClickCustom();
+        rcView = findViewById(R.id.rcView);
+        rcView.setLayoutManager(new LinearLayoutManager(this));
+        List<NewPost> arrayTestPost = new ArrayList<>();
+        NewPost newPost = new NewPost();
+        newPost.setTitle("Alice in the wonderland");
+        newPost.setChange("Harry Potter");
+        newPost.setTel("89048220611");
+        newPost.setDisc("This is wonderful story about girl who meet a lot of curious creatures");
+        arrayTestPost.add(newPost);
+        arrayTestPost.add(newPost);
+        arrayTestPost.add(newPost);
+        arrayTestPost.add(newPost);
+        postAdapter = new PostAdapter(arrayTestPost, this, onItemClickCustom);
+        rcView.setAdapter(postAdapter);
 
 
         nav_view = findViewById(R.id.nav_view);
@@ -83,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_view.setNavigationItemSelectedListener(this);
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
         mAuth = FirebaseAuth.getInstance();
+
+
         // Write a message to the database
         //FirebaseDatabase database = FirebaseDatabase.getInstance();
 

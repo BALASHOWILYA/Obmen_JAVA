@@ -21,6 +21,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
     private Context context;
     private OnItemClickCustom onItemClickCustom;
 
+
     public PostAdapter(List<NewPost> arrayPost, Context context, OnItemClickCustom onItemClickCustom) {
         this.arrayPost = arrayPost;
         this.context = context;
@@ -65,9 +66,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
 
         public void setData(NewPost newPost){
             tvTitle.setText(newPost.getTitle());
-            tvChange.setText(newPost.getTitle());
-            tvTel.setText(newPost.getTitle());
-            tvDisc.setText(newPost.getTitle());
+            tvChange.setText(newPost.getChange());
+            tvTel.setText(newPost.getTel());
+            tvDisc.setText(newPost.getDisc());
 
 
 

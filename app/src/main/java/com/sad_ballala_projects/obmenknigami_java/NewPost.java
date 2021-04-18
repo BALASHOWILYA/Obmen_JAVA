@@ -6,7 +6,24 @@ public class NewPost {
     private String Change;
     private String tel;
     private String disc;
+    private String uid;
+    private String time;
 
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getKey() {
         return key;
