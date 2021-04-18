@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void init()
     {
+        DbManager dbManager = new DbManager();
+        dbManager.getDataFromBd("научная литература");
         setOnItemClickCustom();
         rcView = findViewById(R.id.rcView);
         rcView.setLayoutManager(new LinearLayoutManager(this));
@@ -105,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         arrayTestPost.add(newPost);
         postAdapter = new PostAdapter(arrayTestPost, this, onItemClickCustom);
         rcView.setAdapter(postAdapter);
+
 
 
         nav_view = findViewById(R.id.nav_view);
