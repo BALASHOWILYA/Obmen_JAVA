@@ -21,6 +21,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:id="@+id/edChange"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/change"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/imItem"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/imItem"
+        app:layout_constraintTop_toBottomOf="@+id/edTitle" />
+
+    <EditText
         android:id="@+id/edTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,6 +42,7 @@
         android:hint="@string/edit_book_name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/imItem"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/imItem"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
@@ -36,12 +50,14 @@
         android:id="@+id/edTel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/edit_phone"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/imItem"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/imItem"
-        app:layout_constraintTop_toBottomOf="@+id/edTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/edChange" />
 
     <EditText
         android:id="@+id/edDisc"
@@ -78,4 +94,5 @@
         android:src="@drawable/ic_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

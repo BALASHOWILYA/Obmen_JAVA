@@ -3,8 +3,10 @@ package com.sad_ballala_projects.obmenknigami_java;
 public class NewPost {
     private String imageId;
     private String title;
+    private String Change;
     private String tel;
     private String disc;
+
 
     public String getKey() {
         return key;
@@ -46,5 +48,13 @@ public class NewPost {
 
     public void setDisc(String disc) {
         this.disc = disc;
+    }
+
+    public String getChange() {
+        return Change;
+    }
+
+    public void setChange(String change) {
+        Change = change;
     }
 }

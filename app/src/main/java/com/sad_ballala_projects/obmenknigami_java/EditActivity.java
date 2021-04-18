@@ -40,7 +40,7 @@ public class EditActivity extends AppCompatActivity {
     private Uri uploadUri;
     private DatabaseReference dRef;
     private FirebaseAuth mAuth;
-    private EditText edTitle, edTel, edDisc;
+    private EditText edTitle, edTel, edDisc, edChange;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class EditActivity extends AppCompatActivity {
         edTitle = findViewById(R.id.edTitle);
         edTel = findViewById(R.id.edTel);
         edDisc = findViewById(R.id.edDisc);
+        edChange = findViewById(R.id.edChange);
 
         spinner = findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -134,6 +135,7 @@ public class EditActivity extends AppCompatActivity {
 
             post.setImageId(uploadUri.toString());
             post.setTitle(edTitle.getText().toString());
+            post.setChange(edChange.getText().toString());
             post.setTel(edTel.getText().toString());
             post.setDisc(edDisc.getText().toString());
             post.setKey(key);
