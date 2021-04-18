@@ -11,35 +11,44 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.sad_ballala_projects.obmenknigami_java.adapter.DataSender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbManager {
+    private  Query mQuery;
+    private List<NewPost> newPostList;
+    private DataSender dataSender;
+   /*
+    }*/
+
+    public DbManager(DataSender dataSender) {
+        this.dataSender = dataSender;
+        newPostList = new ArrayList<>();
+    }
 
     public void getDataFromBd(String path){
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbRef =db.getReference(path);
-        Query mQuery = dbRef.orderByChild("ads/time");
-        mQuery.addChildEventListener(new ChildEventListener() {
+        mQuery = dbRef.orderByChild("ads/time");
+        readDataUpdate();
+
+    }
+    public void readDataUpdate(){
+        mQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(newPostList.size() > 0) newPostList.clear();
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
 
-                    NewPost newPost = ds.getValue(NewPost.class);
-                    Log.d("MyLog", "Title : " + newPost.getTitle());
-                }
+                    NewPost newPost = ds.child("ads").getValue(NewPost.class);
+                    newPostList.add(newPost);
+                    //Log.d("MyLog", "Title : " + newPost.getTitle());
             }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                dataSender.onDataReceived(newPostList);
 
             }
 

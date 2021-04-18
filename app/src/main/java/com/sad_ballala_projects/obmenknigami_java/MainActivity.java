@@ -32,9 +32,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sad_ballala_projects.obmenknigami_java.adapter.DataSender;
 import com.sad_ballala_projects.obmenknigami_java.adapter.PostAdapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private PostAdapter.OnItemClickCustom onItemClickCustom;
     private RecyclerView rcView;
     private PostAdapter postAdapter;
+    private DataSender dataSender;
 
 
     @Override
@@ -90,25 +94,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void init()
     {
-        DbManager dbManager = new DbManager();
-        dbManager.getDataFromBd("научная литература");
+
         setOnItemClickCustom();
         rcView = findViewById(R.id.rcView);
         rcView.setLayoutManager(new LinearLayoutManager(this));
-        List<NewPost> arrayTestPost = new ArrayList<>();
-        NewPost newPost = new NewPost();
-        newPost.setTitle("Alice in the wonderland");
-        newPost.setChange("Harry Potter");
-        newPost.setTel("89048220611");
-        newPost.setDisc("This is wonderful story about girl who meet a lot of curious creatures");
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        arrayTestPost.add(newPost);
-        postAdapter = new PostAdapter(arrayTestPost, this, onItemClickCustom);
+        List<NewPost> arrayPost = new ArrayList<>();
+
+        postAdapter = new PostAdapter(arrayPost, this, onItemClickCustom);
         rcView.setAdapter(postAdapter);
-
-
 
         nav_view = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -116,20 +109,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.toggle_open, R.string.toggle_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         nav_view.setNavigationItemSelectedListener(this);
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
         mAuth = FirebaseAuth.getInstance();
-
-
-        // Write a message to the database
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-       // DatabaseReference myRef = database.getReference("message");
-
-       // myRef.setValue("Hello, World!");
+        getDataDB();
+        DbManager dbManager = new DbManager(dataSender);
+        dbManager.getDataFromBd("научная литература");
 
     }
+
+    private void getDataDB(){
+        dataSender = new DataSender() {
+            @Override
+            public void onDataReceived(List<NewPost> listData) {
+                Collections.reverse(listData);
+                postAdapter.updateAdapter(listData);
+            }
+        };
+    }
+
 
 
     @Override

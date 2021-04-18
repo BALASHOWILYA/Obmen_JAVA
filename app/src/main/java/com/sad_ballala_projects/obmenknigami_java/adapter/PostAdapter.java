@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sad_ballala_projects.obmenknigami_java.NewPost;
 import com.sad_ballala_projects.obmenknigami_java.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
         }
 
         public void setData(NewPost newPost){
+            Picasso.get().load(newPost.getImageId()).into(imAds);
             tvTitle.setText(newPost.getTitle());
             tvChange.setText(newPost.getChange());
             tvTel.setText(newPost.getTel());
@@ -83,5 +85,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
     public  interface OnItemClickCustom{
         public void onItemSelected(int position);
     }
+
+    public void updateAdapter(List<NewPost> listData){
+        arrayPost.clear();
+        arrayPost.addAll(listData);
+        notifyDataSetChanged();
+    }
+
 
 }
