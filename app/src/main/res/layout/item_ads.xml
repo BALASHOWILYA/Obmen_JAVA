@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvChangeTel"
+        android:id="@+id/tvChange"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -48,10 +48,22 @@
         android:id="@+id/tvDisc"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:textColor="@color/gray"
         app:layout_constraintBottom_toBottomOf="@+id/imAds"
-        app:layout_constraintEnd_toEndOf="@+id/tvChangeTel"
-        app:layout_constraintStart_toStartOf="@+id/tvChangeTel"
-        app:layout_constraintTop_toBottomOf="@+id/tvChangeTel" />
+        app:layout_constraintEnd_toEndOf="@+id/tvChange"
+        app:layout_constraintStart_toStartOf="@+id/tvChange"
+        app:layout_constraintTop_toBottomOf="@+id/tvTel" />
+
+    <TextView
+        android:id="@+id/tvTel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/gray"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvChange"
+        app:layout_constraintStart_toStartOf="@+id/tvChange"
+        app:layout_constraintTop_toBottomOf="@+id/tvChange" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
