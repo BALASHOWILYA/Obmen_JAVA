@@ -2,6 +2,19 @@
 <resources>
 
     <string-array name="category_spinner">
+
+
+        <item>учебники за 1 класс</item>
+        <item>учебники за 2 класс</item>
+        <item>учебники за 3 класс</item>
+        <item>учебники за 4 класс</item>
+        <item>учебники за 5 класс</item>
+        <item>учебники за 6 класс</item>
+        <item>учебники за 7 класс</item>
+        <item>учебники за 8 класс</item>
+        <item>учебники за 9 класс</item>
+        <item>учебники за 10 класс</item>
+        <item>учебники за 11 класс</item>
         <item>научная литература</item>
         <item>комедия</item>
         <item>романтика</item>
@@ -19,7 +32,7 @@
         <item>биография</item>
         <item>спорт</item>
         <item>классика</item>
-        <item></item>
+
     </string-array>
     
 </resources>

@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView rcView;
     private PostAdapter postAdapter;
     private DataSender dataSender;
+    private DbManager dbManager;
+    public static String MAUTH = "";
 
 
     @Override
@@ -87,8 +89,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             userEmail.setText(currentUser.getEmail());
+            MAUTH = mAuth.getUid();
         } else {
             userEmail.setText(R.string.not_reg);
+            MAUTH = "";
         }
     }
 
@@ -113,8 +117,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
         mAuth = FirebaseAuth.getInstance();
         getDataDB();
-        DbManager dbManager = new DbManager(dataSender);
+        dbManager = new DbManager(dataSender);
         dbManager.getDataFromBd("научная литература");
+        postAdapter.setDbManager(dbManager);
 
     }
 
@@ -130,107 +135,117 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+
             case R.id.id_a_science_book:
-                Toast.makeText(this, "Presed id_a_science_book", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("научная литература");
                 break;
 
             case R.id.id_a_humorous_story:
-                Toast.makeText(this, "Presed id_a_humorous_story", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("комедия");
                 break;
             case R.id.id_a_romance:
-                Toast.makeText(this, "Presed id_a_romance", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("романтика");
                 break;
             case R.id.id_a_detective_story:
-                Toast.makeText(this, "Presed id_a_detective_story", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("детектив");
                 break;
             case R.id.id_an_adventure_novel:
-                Toast.makeText(this, "Presed id_an_adventure_novel", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("приключения");
                 break;
             case R.id.id_a_fiction_book:
-                Toast.makeText(this, "Presed id_a_fiction_book", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("фантастика");
                 break;
             case R.id.id_a_science_fiction_book:
-                Toast.makeText(this, "Presed id_a_science_fiction_book", Toast.LENGTH_LONG).show();
+                dbManager.getDataFromBd("научная фантастика");
                 break;
             case R.id.id_a_drama:
-                Toast.makeText(this, "Presed id_a_drama", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("драма");
                 break;
             case R.id.id_a_psychologyt:
-                Toast.makeText(this, "Presed id_a_psychologyt", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("психология");
                 break;
             case R.id.id_a_horror_story:
-                Toast.makeText(this, "Presed id_a_horror_story", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("ужасы");
                 break;
             case R.id.id_a_fairy_tale:
-                Toast.makeText(this, "Presed id_a_fairy_tale", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("детская литература");
                 break;
             case R.id.id_a_war_novel:
-                Toast.makeText(this, "Presed id_a_war_novel", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("боевик");
                 break;
             case R.id.id_a_historical_novel:
-                Toast.makeText(this, "Presed id_a_historical_novel", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("история");
                 break;
             case R.id.id_an_autobiography:
-                Toast.makeText(this, "Presed id_an_autobiography", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("автобиография");
                 break;
             case R.id.id_a_biography:
-                Toast.makeText(this, "Presed id_a_biography", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("биография");
                 break;
             case R.id.id_a_sport:
-                Toast.makeText(this, "Presed id_a_sport", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("спорт");
                 break;
             case R.id.id_a_classic:
-                Toast.makeText(this, "Presed id_a_classic", Toast.LENGTH_LONG).show();
+
+                dbManager.getDataFromBd("классика");
                 break;
 
+            case R.id.id_my_ads:
+                dbManager.getMyAdsDataFromBd(mAuth.getUid());
+                break;
 
             case R.id.id_textbooks_for_the_1st_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_1st_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 1 класс");
                 break;
             case R.id.id_textbooks_for_the_2nd_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_2nd_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 2 класс");
                 break;
             case R.id.id_textbooks_for_the_3rd_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_3rd_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 3 класс");
                 break;
             case R.id.id_textbooks_for_the_4th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_4th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 4 класс");
                 break;
             case R.id.id_textbooks_for_the_5th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_5th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 5 класс");
                 break;
             case R.id.id_textbooks_for_the_6th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_6th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 6 класс");
                 break;
             case R.id.id_textbooks_for_the_7th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_7th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 7 класс");
                 break;
             case R.id.id_textbooks_for_the_8th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_8th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 8 класс");
                 break;
             case R.id.id_textbooks_for_the_9th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_9th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 9 класс");
                 break;
             case R.id.id_textbooks_for_the_10th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_10th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 10 класс");
                 break;
             case R.id.id_textbooks_for_the_11th_grade:
-                Toast.makeText(this, "Presed id_textbooks_for_the_11th_grade", Toast.LENGTH_LONG)
-                        .show();
+                dbManager.getDataFromBd("учебники за 11 класс");
                 break;
 
 

@@ -5,8 +5,14 @@
 
 
 
+
+
     <item android:title="@string/school_textbooks">
         <menu>
+            <item
+                android:title="@string/my_ads"
+                android:id="@+id/id_my_ads"
+                />
             <item
                 android:title="@string/textbooks_for_the_1st_grade"
                 android:id="@+id/id_textbooks_for_the_1st_grade"

@@ -8,6 +8,16 @@ public class NewPost {
     private String disc;
     private String uid;
     private String time;
+    private String cat;
+    private String key;
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
+    }
 
     public String getUid() {
         return uid;
@@ -32,8 +42,6 @@ public class NewPost {
     public void setKey(String key) {
         this.key = key;
     }
-
-    private String key;
 
     public String getImageId() {
         return imageId;
