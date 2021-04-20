@@ -48,6 +48,7 @@ public class EditActivity extends AppCompatActivity {
     private String temp_uid = "";
     private String temp_time = "";
     private String temp_key = "";
+    private String temp_total_views = "";
     private String temp_image_url = "";
     private boolean is_image_update = false;
 
@@ -96,6 +97,7 @@ public class EditActivity extends AppCompatActivity {
         temp_time = i.getStringExtra(MyConstants.TIME);
         temp_key = i.getStringExtra(MyConstants.KEY);
         temp_image_url = i.getStringExtra(MyConstants.IMAGE_ID);
+        temp_total_views = i.getStringExtra(MyConstants.TOTAL_VIEWS);
 
 
     }
@@ -134,6 +136,7 @@ public class EditActivity extends AppCompatActivity {
                 assert uploadUri != null;
                 savePost();
                 Toast.makeText(EditActivity.this, "Upload done !" , Toast.LENGTH_LONG).show();
+                finish();
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -165,6 +168,7 @@ public class EditActivity extends AppCompatActivity {
                 updatePost();
                 savePost();
                 Toast.makeText(EditActivity.this, "Upload done !" , Toast.LENGTH_LONG).show();
+                finish();
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -187,7 +191,7 @@ public class EditActivity extends AppCompatActivity {
                 updatePost();
             }
         }
-        finish();
+
 
     }
 
@@ -217,6 +221,7 @@ public class EditActivity extends AppCompatActivity {
             post.setCat(temp_cat);
             post.setTime(temp_time);
             post.setUid(temp_uid);
+            post.setTotal_views(temp_total_views);
 
             // создаем новую подпапку, название папки зависит от Uid, далее создается объявление с помощью key, а затем помещаем туда значение
             dRef.child(temp_key).child("ads").setValue(post);
@@ -244,7 +249,7 @@ public class EditActivity extends AppCompatActivity {
             post.setCat(spinner.getSelectedItem().toString());
             post.setTime(String.valueOf(System.nanoTime()));
             post.setUid(mAuth.getUid());
-
+            post.setTotal_views("0");
             // создаем новую подпапку, название папки зависит от Uid, далее создается объявление с помощью key, а затем помещаем туда значение
             if(key != null)dRef.child(key).child("ads").setValue(post);
 

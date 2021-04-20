@@ -68,6 +68,20 @@ public class DbManager {
 
     }
 
+    public void updateTotalViews(final NewPost newPost){
+        DatabaseReference dRef = FirebaseDatabase.getInstance().getReference(newPost.getCat());
+        int total_views;
+        try{
+            total_views = Integer.parseInt(newPost.getTotal_views());
+        }
+        catch (NumberFormatException e){
+            total_views = 0;
+        }
+        total_views++;
+        dRef.child(newPost.getKey()).child("ads/total_views").setValue(String.valueOf(total_views));
+
+    }
+
     public DbManager(DataSender dataSender, Context context) {
         this.dataSender = dataSender;
         this.context = context;

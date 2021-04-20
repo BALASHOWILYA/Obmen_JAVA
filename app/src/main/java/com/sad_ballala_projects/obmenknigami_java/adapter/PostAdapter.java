@@ -63,7 +63,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
 
     public class ViewHolderData extends  RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView tvTitle, tvTel, tvDisc, tvChange;
+        private TextView tvTitle, tvTel, tvDisc, tvChange,tvTotalViews;
         private ImageView imAds;
         private LinearLayout edit_layout;
         private ImageButton deleteButton, editButton;
@@ -74,6 +74,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
         public ViewHolderData(@NonNull View itemView, OnItemClickCustom onItemClickCustom ) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvTotalViews = itemView.findViewById(R.id.tvTotalViews);
             tvChange = itemView.findViewById(R.id.tvChange);
             tvTel = itemView.findViewById(R.id.tvTel);
             tvDisc = itemView.findViewById(R.id.tvDisc);
@@ -99,12 +100,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
             tvChange.setText(Change);
             String Phone = "Номер телефона: " + newPost.getTel();
             tvTel.setText(Phone);
-            String textDisc = null;
+            String textDisc;
             if(newPost.getDisc().length() > 50) {textDisc = newPost.getDisc().substring(0,50) + "...";}
             else{
                 textDisc = newPost.getDisc();
             }
             tvDisc.setText(textDisc);
+            tvTotalViews.setText(newPost.getTotal_views());
 
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,6 +129,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
                     i.putExtra(MyConstants.TIME, newPost.getTime());
                     i.putExtra(MyConstants.CAT, newPost.getCat());
                     i.putExtra(MyConstants.EDIT_STATE, true);
+                    i.putExtra(MyConstants.TOTAL_VIEWS, newPost.getTotal_views());
                     context.startActivity(i);
 
                 }
@@ -138,6 +141,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
 
         @Override
         public void onClick(View v) {
+            dbManager.updateTotalViews(arrayPost.get(getAdapterPosition()));
             onItemClickCustom.onItemSelected(getAdapterPosition());
         }
     }
