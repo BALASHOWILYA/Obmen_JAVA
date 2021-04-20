@@ -78,6 +78,15 @@
     <string name="id_my_ads">мои объявления</string>
     <string name="my_ads">мои объявления</string>
 
+    <!-- Edit Activity -->
+    <string name="delete_title">Удалить объявление?</string>
+    <string name="delete_message">Вы действительно хотите удалить объявление?</string>
+    <string name="Yes">Да</string>
+    <string name="No">Нет</string>
+    <string name="be_not_deleted">An error occurred, image be not deleted</string>
+    <string name="Item_be_not_deleted">An error occurred, item be not deleted</string>
+    <string name="item_deleted">Объявление удалено успешно!</string>
+
 
 
 </resources>

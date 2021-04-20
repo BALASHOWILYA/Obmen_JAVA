@@ -53,11 +53,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DataSender dataSender;
     private DbManager dbManager;
     public static String MAUTH = "";
+    private String current_cat = "научная литература";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("MyLog", "On Create" );
         setContentView(R.layout.activity_main);
         init();
     }
@@ -78,6 +80,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Check if user is signed in (non-null) and update UI accordingly.
         getUserData();
         
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(current_cat.equals("my_ads")){
+            dbManager.getMyAdsDataFromDb(mAuth.getUid());
+        }
+         else{
+            dbManager.getDataFromBd(current_cat);
+        }
+        Log.d("MyLog", "On Resume" );
     }
 
     public void onClickEdit(View View){
@@ -117,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
         mAuth = FirebaseAuth.getInstance();
         getDataDB();
-        dbManager = new DbManager(dataSender);
-        dbManager.getDataFromBd("научная литература");
+        dbManager = new DbManager(dataSender, this);
+        //
         postAdapter.setDbManager(dbManager);
 
     }
@@ -142,109 +157,122 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
 
             case R.id.id_a_science_book:
-
+                current_cat = "научная литература";
                 dbManager.getDataFromBd("научная литература");
                 break;
 
             case R.id.id_a_humorous_story:
-
+                current_cat = "комедия";
                 dbManager.getDataFromBd("комедия");
                 break;
             case R.id.id_a_romance:
-
+                current_cat = "романтика";
                 dbManager.getDataFromBd("романтика");
                 break;
             case R.id.id_a_detective_story:
-
+                current_cat = "детектив";
                 dbManager.getDataFromBd("детектив");
                 break;
             case R.id.id_an_adventure_novel:
-
+                current_cat = "приключения";
                 dbManager.getDataFromBd("приключения");
                 break;
             case R.id.id_a_fiction_book:
-
+                current_cat = "фантастика";
                 dbManager.getDataFromBd("фантастика");
                 break;
             case R.id.id_a_science_fiction_book:
+                current_cat = "фантастика";
                 dbManager.getDataFromBd("научная фантастика");
                 break;
             case R.id.id_a_drama:
-
+                current_cat = "драма";
                 dbManager.getDataFromBd("драма");
                 break;
             case R.id.id_a_psychologyt:
-
+                current_cat = "психология";
                 dbManager.getDataFromBd("психология");
                 break;
             case R.id.id_a_horror_story:
-
+                current_cat = "ужасы";
                 dbManager.getDataFromBd("ужасы");
                 break;
             case R.id.id_a_fairy_tale:
-
+                current_cat = "детская литература";
                 dbManager.getDataFromBd("детская литература");
                 break;
             case R.id.id_a_war_novel:
-
+                current_cat = "боевик";
                 dbManager.getDataFromBd("боевик");
                 break;
             case R.id.id_a_historical_novel:
-
+                current_cat = "история";
                 dbManager.getDataFromBd("история");
                 break;
             case R.id.id_an_autobiography:
-
+                current_cat = "автобиография";
                 dbManager.getDataFromBd("автобиография");
                 break;
             case R.id.id_a_biography:
-
+                current_cat = "биография";
                 dbManager.getDataFromBd("биография");
                 break;
             case R.id.id_a_sport:
-
+                current_cat = "спорт";
                 dbManager.getDataFromBd("спорт");
                 break;
             case R.id.id_a_classic:
-
+                current_cat = "классика";
                 dbManager.getDataFromBd("классика");
                 break;
 
             case R.id.id_my_ads:
-                dbManager.getMyAdsDataFromBd(mAuth.getUid());
+                current_cat = "my_ads";
+                dbManager.getMyAdsDataFromDb(mAuth.getUid());
                 break;
 
             case R.id.id_textbooks_for_the_1st_grade:
+                current_cat = "учебники за 1 класс";
                 dbManager.getDataFromBd("учебники за 1 класс");
                 break;
             case R.id.id_textbooks_for_the_2nd_grade:
+                current_cat = "учебники за 2 класс";
                 dbManager.getDataFromBd("учебники за 2 класс");
                 break;
             case R.id.id_textbooks_for_the_3rd_grade:
+                current_cat = "учебники за 3 класс";
                 dbManager.getDataFromBd("учебники за 3 класс");
                 break;
             case R.id.id_textbooks_for_the_4th_grade:
+                current_cat = "учебники за 4 класс";
                 dbManager.getDataFromBd("учебники за 4 класс");
                 break;
             case R.id.id_textbooks_for_the_5th_grade:
+                current_cat = "учебники за 5 класс";
                 dbManager.getDataFromBd("учебники за 5 класс");
                 break;
             case R.id.id_textbooks_for_the_6th_grade:
+                current_cat = "учебники за 6 класс";
                 dbManager.getDataFromBd("учебники за 6 класс");
                 break;
             case R.id.id_textbooks_for_the_7th_grade:
+                current_cat = "учебники за 7 класс";
                 dbManager.getDataFromBd("учебники за 7 класс");
                 break;
             case R.id.id_textbooks_for_the_8th_grade:
+                current_cat = "учебники за 8 класс";
                 dbManager.getDataFromBd("учебники за 8 класс");
                 break;
             case R.id.id_textbooks_for_the_9th_grade:
+                current_cat = "учебники за 9 класс";
                 dbManager.getDataFromBd("учебники за 9 класс");
                 break;
             case R.id.id_textbooks_for_the_10th_grade:
+                current_cat = "учебники за 10 класс";
                 dbManager.getDataFromBd("учебники за 10 класс");
                 break;
             case R.id.id_textbooks_for_the_11th_grade:
+                current_cat = "учебники за 11 класс";
                 dbManager.getDataFromBd("учебники за 11 класс");
                 break;
 

@@ -1,6 +1,9 @@
 package com.sad_ballala_projects.obmenknigami_java.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +18,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sad_ballala_projects.obmenknigami_java.DbManager;
+import com.sad_ballala_projects.obmenknigami_java.EditActivity;
 import com.sad_ballala_projects.obmenknigami_java.MainActivity;
 import com.sad_ballala_projects.obmenknigami_java.NewPost;
 import com.sad_ballala_projects.obmenknigami_java.R;
+import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -61,8 +66,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
         private TextView tvTitle, tvTel, tvDisc, tvChange;
         private ImageView imAds;
         private LinearLayout edit_layout;
-        private ImageButton deleteButton;
+        private ImageButton deleteButton, editButton;
         private OnItemClickCustom onItemClickCustom;
+
 
 
         public ViewHolderData(@NonNull View itemView, OnItemClickCustom onItemClickCustom ) {
@@ -74,6 +80,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
             imAds = itemView.findViewById(R.id.imAds);
             edit_layout = itemView.findViewById(R.id.edit_layout);
             deleteButton = itemView.findViewById(R.id.imDeleteItem);
+            editButton = itemView.findViewById(R.id.imEditItem);
             itemView.setOnClickListener(this);
             this.onItemClickCustom = onItemClickCustom;
         }
@@ -102,9 +109,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dbManager.deleteItem(newPost);
-                    arrayPost.remove(getAdapterPosition());
-                    notifyItemRemoved(getAdapterPosition());
+
+                    deleteDialog(newPost, getAdapterPosition());
+                }
+            });
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, EditActivity.class);
+                    i.putExtra(MyConstants.IMAGE_ID, newPost.getImageId());
+                    i.putExtra(MyConstants.TITLE, newPost.getTitle());
+                    i.putExtra(MyConstants.CHANGE, newPost.getChange());
+                    i.putExtra(MyConstants.TEL, newPost.getTel());
+                    i.putExtra(MyConstants.DISC, newPost.getDisc());
+                    i.putExtra(MyConstants.KEY, newPost.getKey());
+                    i.putExtra(MyConstants.UID, newPost.getUid());
+                    i.putExtra(MyConstants.TIME, newPost.getTime());
+                    i.putExtra(MyConstants.CAT, newPost.getCat());
+                    i.putExtra(MyConstants.EDIT_STATE, true);
+                    context.startActivity(i);
+
                 }
             });
 
@@ -118,7 +142,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
         }
     }
 
-    
+    private void deleteDialog(final NewPost newPost, int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.delete_title);
+        builder.setMessage(R.string.delete_message);
+        builder.setNegativeButton(R.string.No, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dbManager.deleteItem(newPost);
+                    arrayPost.remove(position);
+                    notifyItemRemoved(position);
+            }
+        });
+        builder.show();
+
+
+    }
+
 
     public  interface OnItemClickCustom{
         void onItemSelected(int position);
