@@ -1,5 +1,6 @@
 package com.sad_ballala_projects.obmenknigami_java;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -51,6 +52,7 @@ public class EditActivity extends AppCompatActivity {
     private String temp_total_views = "";
     private String temp_image_url = "";
     private boolean is_image_update = false;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class EditActivity extends AppCompatActivity {
 
     private void init(){
 
+        pd = new ProgressDialog(this);
+        pd.setMessage("Идет загрузка...");
         edTitle = findViewById(R.id.edTitle);
         edTel = findViewById(R.id.edTel);
         edDisc = findViewById(R.id.edDisc);
@@ -181,6 +185,8 @@ public class EditActivity extends AppCompatActivity {
 
     public void onClickSavePost(View View){
 
+        pd.show();
+
         if(!edit_state) {
             uploadImage();
         } else{
@@ -226,6 +232,7 @@ public class EditActivity extends AppCompatActivity {
             // создаем новую подпапку, название папки зависит от Uid, далее создается объявление с помощью key, а затем помещаем туда значение
             dRef.child(temp_key).child("ads").setValue(post);
 
+            finish();
 
     }
 
@@ -247,13 +254,22 @@ public class EditActivity extends AppCompatActivity {
             post.setDisc(edDisc.getText().toString());
             post.setKey(key);
             post.setCat(spinner.getSelectedItem().toString());
-            post.setTime(String.valueOf(System.nanoTime()));
+            post.setTime(String.valueOf(System.currentTimeMillis()));
             post.setUid(mAuth.getUid());
             post.setTotal_views("0");
             // создаем новую подпапку, название папки зависит от Uid, далее создается объявление с помощью key, а затем помещаем туда значение
             if(key != null)dRef.child(key).child("ads").setValue(post);
+            Intent i = new Intent();
+            i.putExtra("cat", spinner.getSelectedItem().toString());
+            setResult(RESULT_OK, i);
+
 
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pd.dismiss();
+    }
 }

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ObmenKnigami_Java</string>
 
+    <string name="banner_id">ca-app-pub-3940256099942544/6300978111</string>
+
     <!-- Menu Drawer Strings -->
     <string name="Different_types_of_books">Жанры литературы</string>
     <string name="a_science_book">научная литература</string>

@@ -1,6 +1,7 @@
 package com.sad_ballala_projects.obmenknigami_java;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -54,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DbManager dbManager;
     public static String MAUTH = "";
     private String current_cat = "научная литература";
+    private final int EDIT_RES = 12;
+    private AdView adView;
 
 
     @Override
@@ -61,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         Log.d("MyLog", "On Create" );
         setContentView(R.layout.activity_main);
+        addAds();
         init();
     }
 
@@ -73,6 +80,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
+    // не придется еще раз запускать активити мы просто вернемся на наше старое активити и будет ждать ответа от editactivity должен отправить то что было в спинере
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == EDIT_RES && resultCode == RESULT_OK && data != null){
+            current_cat = data.getStringExtra("cat");
+        }
+    }
 
     @Override
     public void onStart() {
@@ -85,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        if(adView != null){
+            adView.resume();
+        }
 
         if(current_cat.equals("my_ads")){
             dbManager.getMyAdsDataFromDb(mAuth.getUid());
@@ -95,9 +113,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d("MyLog", "On Resume" );
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(adView != null){
+            adView.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(adView != null){
+            adView.destroy();
+        }
+
+    }
+
     public void onClickEdit(View View){
         Intent i = new Intent(MainActivity.this, EditActivity.class);
-        startActivity(i);
+        startActivityForResult(i, EDIT_RES);
     }
 
     private void getUserData(){
@@ -372,6 +407,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getUserData();
     }
 
+    private void addAds(){
+        MobileAds.initialize(this);
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
 
 
 
