@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.Continuation;
@@ -28,6 +31,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.sad_ballala_projects.obmenknigami_java.adapter.ImageAdapter;
+import com.sad_ballala_projects.obmenknigami_java.screens.ChooseImagesActivity;
 import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
 import com.squareup.picasso.Picasso;
 
@@ -63,6 +68,10 @@ public class EditActivity extends AppCompatActivity {
 
 
     private void init(){
+
+        //ViewPager vp = findViewById(R.id.view_pager);
+        //ImageAdapter imageAdapter = new ImageAdapter(this);
+        //vp.setAdapter(imageAdapter);
 
         pd = new ProgressDialog(this);
         pd.setMessage("Идет загрузка...");
@@ -108,18 +117,7 @@ public class EditActivity extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 10 && data != null && data.getData() != null){
-            if(resultCode == RESULT_OK){
 
-                imItem.setImageURI(data.getData());
-                is_image_update = true;
-
-            }
-        }
-    }
 
     private void uploadImage(){
         Bitmap bitMap = ((BitmapDrawable)imItem.getDrawable()).getBitmap();
@@ -202,16 +200,26 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
-    public void OnClickImage(View View){
-        getImage();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 15 && data != null){
+            if(resultCode == RESULT_OK){
+
+                Log.d("MyLog", "Uri main" + data.getStringExtra("uriMain"));
+                Log.d("MyLog", "Uri 2" + data.getStringExtra("uri2"));
+                Log.d("MyLog", "Uri 3" + data.getStringExtra("uri3"));
+
+            }
+        }
     }
 
-    private void getImage(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 10);
+
+    public void OnClickImage(View View){
+        Intent i = new Intent(EditActivity.this, ChooseImagesActivity.class);
+        startActivityForResult(i, 15);
+
     }
+
 
     private  void updatePost(){
         dRef = FirebaseDatabase.getInstance().getReference(temp_cat);
