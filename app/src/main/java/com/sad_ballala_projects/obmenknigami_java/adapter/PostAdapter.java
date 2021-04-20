@@ -22,6 +22,7 @@ import com.sad_ballala_projects.obmenknigami_java.EditActivity;
 import com.sad_ballala_projects.obmenknigami_java.MainActivity;
 import com.sad_ballala_projects.obmenknigami_java.NewPost;
 import com.sad_ballala_projects.obmenknigami_java.R;
+import com.sad_ballala_projects.obmenknigami_java.ShowLayoutActivity;
 import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
 import com.squareup.picasso.Picasso;
 
@@ -115,9 +116,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
                     deleteDialog(newPost, getAdapterPosition());
                 }
             });
-            editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            editButton.setOnClickListener( (v) -> {
+
                     Intent i = new Intent(context, EditActivity.class);
                     i.putExtra(MyConstants.IMAGE_ID, newPost.getImageId());
                     i.putExtra(MyConstants.TITLE, newPost.getTitle());
@@ -132,7 +132,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
                     i.putExtra(MyConstants.TOTAL_VIEWS, newPost.getTotal_views());
                     context.startActivity(i);
 
-                }
             });
 
 
@@ -141,7 +140,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolderData
 
         @Override
         public void onClick(View v) {
-            dbManager.updateTotalViews(arrayPost.get(getAdapterPosition()));
+            NewPost newPost = arrayPost.get(getAdapterPosition());
+            dbManager.updateTotalViews(newPost);
+            Intent i = new Intent(context, ShowLayoutActivity.class);
+            i.putExtra(MyConstants.IMAGE_ID, newPost.getImageId());
+            i.putExtra(MyConstants.TITLE, newPost.getTitle());
+            i.putExtra(MyConstants.CHANGE, newPost.getChange());
+            i.putExtra(MyConstants.TEL, newPost.getTel());
+            i.putExtra(MyConstants.DISC, newPost.getDisc());
+            context.startActivity(i);
             onItemClickCustom.onItemSelected(getAdapterPosition());
         }
     }
