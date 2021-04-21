@@ -6,35 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imItem"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
 
-        android:onClick="OnClickImage"
-        android:src="@drawable/ic_my_books"
-        android:visibility="visible"
+
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </androidx.viewpager.widget.ViewPager>
 
 
-
-    <EditText
-        android:id="@+id/edChange"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/tvImagesCounter"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/change"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/imItem"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="@+id/imItem"
-        app:layout_constraintTop_toBottomOf="@+id/edTitle" />
+        android:layout_marginBottom="8dp"
+        android:background="@color/black"
+        android:padding="5dp"
+        android:textColor="@color/White"
+        app:layout_constraintBottom_toBottomOf="@+id/view_pager"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager" />
 
     <EditText
         android:id="@+id/edTitle"
@@ -44,10 +43,35 @@
         android:ems="10"
         android:hint="@string/edit_book_name"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/imItem"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/imItem"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="OnClickImage"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintTop_toTopOf="@+id/view_pager"
+        app:srcCompat="@drawable/ic_edit_images"
+        tools:ignore="VectorDrawableCompat" />
+
+    <EditText
+        android:id="@+id/edChange"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/change"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
+        app:layout_constraintTop_toBottomOf="@+id/edTitle" />
 
     <EditText
         android:id="@+id/edTel"
@@ -57,9 +81,9 @@
         android:ems="10"
         android:hint="@string/edit_phone"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/imItem"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imItem"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
         app:layout_constraintTop_toBottomOf="@+id/edChange" />
 
     <EditText
@@ -72,8 +96,8 @@
         android:hint="@string/edit_discription"
         android:inputType="textMultiLine|textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imItem"
-        app:layout_constraintStart_toStartOf="@+id/imItem"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
         app:layout_constraintTop_toBottomOf="@+id/edTel" />
 
     <Spinner
@@ -82,9 +106,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@android:drawable/spinner_dropdown_background"
-        app:layout_constraintEnd_toEndOf="@+id/imItem"
-        app:layout_constraintStart_toStartOf="@+id/imItem"
-        app:layout_constraintTop_toBottomOf="@+id/imItem" />
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
+        app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"

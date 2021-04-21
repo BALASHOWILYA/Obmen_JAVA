@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,13 +41,13 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
 public class EditActivity extends AppCompatActivity {
     // Create a Cloud Storage reference from the app
     private Spinner spinner;
     private StorageReference mStorageRef;
-    private ImageView imItem;
     private String[] uploadUri = new String[3];
     private DatabaseReference dRef;
     private FirebaseAuth mAuth;
@@ -60,6 +61,9 @@ public class EditActivity extends AppCompatActivity {
     private String temp_image_url = "";
     private boolean is_image_update = false;
     private ProgressDialog pd;
+    private List<String> imagesUris;
+    private ImageAdapter imageAdapter;
+    private TextView vtImagesCounter;
 
     private int load_image_counter = 0;
 
@@ -73,9 +77,32 @@ public class EditActivity extends AppCompatActivity {
 
     private void init(){
 
-        //ViewPager vp = findViewById(R.id.view_pager);
-        //ImageAdapter imageAdapter = new ImageAdapter(this);
-        //vp.setAdapter(imageAdapter);
+        vtImagesCounter = findViewById(R.id.tvImagesCounter);
+        imagesUris = new ArrayList<>();
+
+        ViewPager vp = findViewById(R.id.view_pager);
+        imageAdapter = new ImageAdapter(this);
+        vp.setAdapter(imageAdapter);
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                String dataText = position + 1 + "/"  + imagesUris.size();
+                vtImagesCounter.setText(dataText);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+
         uploadUri[0] = "empty";
         uploadUri[1] = "empty";
         uploadUri[2] = "empty";
@@ -94,7 +121,6 @@ public class EditActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
         spinner.getSelectedItem();
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
-        imItem = findViewById(R.id.imItem);
         getMyIntent();
     }
 
@@ -107,7 +133,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void setDataAds(Intent i){
-        Picasso.get().load(i.getStringExtra(MyConstants.IMAGE_ID)).into(imItem);
+       // Picasso.get().load(i.getStringExtra(MyConstants.IMAGE_ID)).into(imItem);
         edTel.setText(i.getStringExtra(MyConstants.TEL));
         edTitle.setText(i.getStringExtra(MyConstants.TITLE));
         edChange.setText(i.getStringExtra(MyConstants.CHANGE));
@@ -248,6 +274,14 @@ public class EditActivity extends AppCompatActivity {
                 uploadUri[0] = data.getStringExtra("uriMain");
                 uploadUri[1] = data.getStringExtra("uri2");
                 uploadUri[2] = data.getStringExtra("uri3");
+                imagesUris.clear();
+                for (String s : uploadUri){
+                    if(!s.equals("empty"))imagesUris.add(s);
+                }
+                imageAdapter.updateImages(imagesUris);
+                String dataText =  1 + "/"  + imagesUris.size();
+                vtImagesCounter.setText(dataText);
+
 
             }
         }

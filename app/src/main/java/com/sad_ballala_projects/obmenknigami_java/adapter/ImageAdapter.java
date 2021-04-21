@@ -1,6 +1,7 @@
 package com.sad_ballala_projects.obmenknigami_java.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,15 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.sad_ballala_projects.obmenknigami_java.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ImageAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater inflater;
+    private List<String> imagesUris;
 
-    int[] imageArray = {R.drawable.image_test_1, R.drawable.image_test_2, R.drawable.image_test_3};
+
 
     //чтобы передавать с editActivity context
 
@@ -24,11 +29,12 @@ public class ImageAdapter extends PagerAdapter {
     public ImageAdapter(Context context) {
         this.context = context;
         inflater = LayoutInflater.from(context);
+        imagesUris = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return imageArray.length;
+        return imagesUris.size();
     }
 
     @NonNull
@@ -36,7 +42,7 @@ public class ImageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = inflater.inflate(R.layout.pager_item, container, false);
         ImageView imItem = view.findViewById(R.id.imageViewPager);
-        imItem.setImageResource(imageArray[position]);
+        imItem.setImageURI(Uri.parse(imagesUris.get(position)));
         container.addView(view);
 
         return view;
@@ -50,5 +56,16 @@ public class ImageAdapter extends PagerAdapter {
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((LinearLayout)object);
+    }
+
+    public void updateImages(List<String> images){
+        imagesUris.clear();
+        imagesUris.addAll(images);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 }
