@@ -60,7 +60,7 @@ public class EditActivity extends AppCompatActivity {
     private String temp_image_url = "";
     private boolean is_image_update = false;
     private ProgressDialog pd;
-    private String[] uris = new String[3];
+
     private int load_image_counter = 0;
 
     @Override
@@ -76,9 +76,9 @@ public class EditActivity extends AppCompatActivity {
         //ViewPager vp = findViewById(R.id.view_pager);
         //ImageAdapter imageAdapter = new ImageAdapter(this);
         //vp.setAdapter(imageAdapter);
-        uploadUri[0] = "null";
-        uploadUri[1] = "null";
-        uploadUri[2] = "null";
+        uploadUri[0] = "empty";
+        uploadUri[1] = "empty";
+        uploadUri[2] = "empty";
 
         pd = new ProgressDialog(this);
         pd.setMessage("Идет загрузка...");
@@ -128,15 +128,16 @@ public class EditActivity extends AppCompatActivity {
 
     private void uploadImage(){
 
-        if(load_image_counter < uris.length){
-        if(uris[load_image_counter] != null) {
+        if(load_image_counter < uploadUri.length){
+        if(!uploadUri[load_image_counter].equals("empty")) {
             Bitmap bitMap = null;
             try {
-                bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(uris[load_image_counter]));
+                bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(uploadUri[load_image_counter]));
             } catch (IOException e) {
                 e.printStackTrace();
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
+            assert bitMap != null;
             bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             byte[] byteArray = out.toByteArray();
             final StorageReference mRef = mStorageRef.child(System.currentTimeMillis() + "image");
@@ -153,7 +154,7 @@ public class EditActivity extends AppCompatActivity {
                     uploadUri[load_image_counter] = task.getResult().toString();
                     assert uploadUri != null;
                     load_image_counter++;
-                    if (load_image_counter < uris.length) {
+                    if (load_image_counter < uploadUri.length) {
                         uploadImage();
                     } else {
                         savePost();
@@ -182,11 +183,12 @@ public class EditActivity extends AppCompatActivity {
     private void uploadUpdateImage(){
         Bitmap bitMap = null;
         try {
-            bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(),Uri.parse(uris[load_image_counter]));
+            bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(),Uri.parse(uploadUri[load_image_counter]));
         } catch (IOException e) {
             e.printStackTrace();
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        assert bitMap != null;
         bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         byte[] byteArray = out.toByteArray();
         final StorageReference mRef = FirebaseStorage.getInstance().getReferenceFromUrl(temp_image_url);
@@ -243,9 +245,9 @@ public class EditActivity extends AppCompatActivity {
                 Log.d("MyLog", "Uri main" + data.getStringExtra("uriMain"));
                 Log.d("MyLog", "Uri 2" + data.getStringExtra("uri2"));
                 Log.d("MyLog", "Uri 3" + data.getStringExtra("uri3"));
-                uris[0] = data.getStringExtra("uriMain");
-                uris[1] = data.getStringExtra("uri2");
-                uris[2] = data.getStringExtra("uri3");
+                uploadUri[0] = data.getStringExtra("uriMain");
+                uploadUri[1] = data.getStringExtra("uri2");
+                uploadUri[2] = data.getStringExtra("uri3");
 
             }
         }
