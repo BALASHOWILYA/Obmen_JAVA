@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -37,6 +38,7 @@ import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
@@ -45,7 +47,7 @@ public class EditActivity extends AppCompatActivity {
     private Spinner spinner;
     private StorageReference mStorageRef;
     private ImageView imItem;
-    private Uri uploadUri;
+    private String[] uploadUri = new String[3];
     private DatabaseReference dRef;
     private FirebaseAuth mAuth;
     private EditText edTitle, edTel, edDisc, edChange;
@@ -58,6 +60,8 @@ public class EditActivity extends AppCompatActivity {
     private String temp_image_url = "";
     private boolean is_image_update = false;
     private ProgressDialog pd;
+    private String[] uris = new String[3];
+    private int load_image_counter = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +76,9 @@ public class EditActivity extends AppCompatActivity {
         //ViewPager vp = findViewById(R.id.view_pager);
         //ImageAdapter imageAdapter = new ImageAdapter(this);
         //vp.setAdapter(imageAdapter);
+        uploadUri[0] = "null";
+        uploadUri[1] = "null";
+        uploadUri[2] = "null";
 
         pd = new ProgressDialog(this);
         pd.setMessage("Идет загрузка...");
@@ -120,37 +127,65 @@ public class EditActivity extends AppCompatActivity {
 
 
     private void uploadImage(){
-        Bitmap bitMap = ((BitmapDrawable)imItem.getDrawable()).getBitmap();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        byte[] byteArray = out.toByteArray();
-        final StorageReference mRef = mStorageRef.child(System.currentTimeMillis() + "image");
-        UploadTask up = mRef.putBytes(byteArray);
-        Task<Uri> task = up.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                return mRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                uploadUri = task.getResult();
-                assert uploadUri != null;
-                savePost();
-                Toast.makeText(EditActivity.this, "Upload done !" , Toast.LENGTH_LONG).show();
-                finish();
 
+        if(load_image_counter < uris.length){
+        if(uris[load_image_counter] != null) {
+            Bitmap bitMap = null;
+            try {
+                bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(uris[load_image_counter]));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            byte[] byteArray = out.toByteArray();
+            final StorageReference mRef = mStorageRef.child(System.currentTimeMillis() + "image");
+            UploadTask up = mRef.putBytes(byteArray);
+            Task<Uri> task = up.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    return mRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.getResult() == null) return;
+                    uploadUri[load_image_counter] = task.getResult().toString();
+                    assert uploadUri != null;
+                    load_image_counter++;
+                    if (load_image_counter < uris.length) {
+                        uploadImage();
+                    } else {
+                        savePost();
+                        Toast.makeText(EditActivity.this, "Upload done !", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
 
-            }
-        });
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        } else {
+            load_image_counter++;
+            uploadImage();
+        }} else{
+            savePost();
+            finish();
+        }
+
     }
 
     private void uploadUpdateImage(){
-        Bitmap bitMap = ((BitmapDrawable)imItem.getDrawable()).getBitmap();
+        Bitmap bitMap = null;
+        try {
+            bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(),Uri.parse(uris[load_image_counter]));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         byte[] byteArray = out.toByteArray();
@@ -164,7 +199,7 @@ public class EditActivity extends AppCompatActivity {
         }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
-                uploadUri = task.getResult();
+                uploadUri[load_image_counter] = task.getResult().toString();
                 assert uploadUri != null;
                 temp_image_url = uploadUri.toString();
                 updatePost();
@@ -208,6 +243,9 @@ public class EditActivity extends AppCompatActivity {
                 Log.d("MyLog", "Uri main" + data.getStringExtra("uriMain"));
                 Log.d("MyLog", "Uri 2" + data.getStringExtra("uri2"));
                 Log.d("MyLog", "Uri 3" + data.getStringExtra("uri3"));
+                uris[0] = data.getStringExtra("uriMain");
+                uris[1] = data.getStringExtra("uri2");
+                uris[2] = data.getStringExtra("uri3");
 
             }
         }
@@ -255,7 +293,9 @@ public class EditActivity extends AppCompatActivity {
             NewPost post = new NewPost();
 
 
-            post.setImageId(uploadUri.toString());
+            post.setImageId(uploadUri[0]);
+            post.setImageId2(uploadUri[1]);
+            post.setImageId3(uploadUri[2]);
             post.setTitle(edTitle.getText().toString());
             post.setChange(edChange.getText().toString());
             post.setTel(edTel.getText().toString());

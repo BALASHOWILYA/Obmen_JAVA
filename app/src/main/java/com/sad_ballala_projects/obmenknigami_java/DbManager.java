@@ -37,28 +37,57 @@ public class DbManager {
             "детектив","приключения","фантастика","научная фантастика",
             "драма","психология","ужасы","детская литература","боевик","история","автобиография",
             "биография", "спорт", "классикаклассика" };
+    private int deleteImageCounter = 0;
 
 
 
 
     public void deleteItem(final NewPost newPost){
-        StorageReference sRef = fs.getReferenceFromUrl(newPost.getImageId());
-        sRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                DatabaseReference dbRef = db.getReference(newPost.getCat());
-                dbRef.child(newPost.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(context, R.string.item_deleted, Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, R.string.Item_be_not_deleted, Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+        StorageReference sRef = null;
+        switch (deleteImageCounter)
+        {
+            case 0:
+               if(!newPost.getImageId().equals("null")){
+                   sRef = fs.getReferenceFromUrl(newPost.getImageId());
+               } else {
+                    deleteImageCounter++;
+                    deleteItem(newPost);
+               }
+                break;
+
+            case 1:
+                if(!newPost.getImageId2().equals("null")){
+                    sRef = fs.getReferenceFromUrl(newPost.getImageId2());
+                } else {
+                    deleteImageCounter++;
+                    deleteItem(newPost);
+                }
+                break;
+
+            case 2:
+                if(!newPost.getImageId3().equals("null")){
+                    sRef = fs.getReferenceFromUrl(newPost.getImageId3());
+                } else {
+                    deleteDBItem(newPost);
+                    sRef = null;
+                    deleteImageCounter = 0;
+                }
+                break;
+
+        }
+        if(sRef == null) return;
+
+
+        sRef.delete().addOnSuccessListener(aVoid -> {
+            deleteImageCounter ++;
+            if(deleteImageCounter < 3){
+                deleteItem(newPost);
+            } else {
+                deleteImageCounter = 0;
+                deleteDBItem(newPost);
             }
+
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -66,6 +95,21 @@ public class DbManager {
             }
         });
 
+    }
+
+    private void deleteDBItem(NewPost newPost){
+        DatabaseReference dbRef = db.getReference(newPost.getCat());
+        dbRef.child(newPost.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(context, R.string.item_deleted, Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, R.string.Item_be_not_deleted, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void updateTotalViews(final NewPost newPost){

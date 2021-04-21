@@ -2,6 +2,8 @@ package com.sad_ballala_projects.obmenknigami_java;
 
 public class NewPost {
     private String imageId;
+    private String imageId2;
+    private String imageId3;
     private String title;
     private String Change;
     private String tel;
@@ -11,6 +13,22 @@ public class NewPost {
     private String cat;
     private String key;
     private String total_views;
+
+    public String getImageId2() {
+        return imageId2;
+    }
+
+    public void setImageId2(String imageId2) {
+        this.imageId2 = imageId2;
+    }
+
+    public String getImageId3() {
+        return imageId3;
+    }
+
+    public void setImageId3(String imageId3) {
+        this.imageId3 = imageId3;
+    }
 
     public String getTotal_views() {
         return total_views;

@@ -94,4 +94,10 @@
     <string name="exchange">Обмен:</string>
 
 
+    <!--Choose image activity -->
+    <string name="main_image">Главное фото</string>
+    <string name="image2">Фото 2</string>
+    <string name="image3">Фото 3</string>
+
+
 </resources>
