@@ -5,6 +5,8 @@ import com.sad_ballala_projects.obmenknigami_java.MainActivity;
 public class MyConstants {
     public static final String TITLE = "title_" + MainActivity.class.getName();
     public static final String IMAGE_ID = "im_id_" + MainActivity.class.getName();
+    public static final String IMAGE_ID_2 = "im_id_2_" + MainActivity.class.getName();
+    public static final String IMAGE_ID_3 = "im_id_3_" + MainActivity.class.getName();
     public static final String CHANGE = "change_" + MainActivity.class.getName();
     public static final String TEL = "tel_" + MainActivity.class.getName();
     public static final String DISC = "disc_" + MainActivity.class.getName();

@@ -178,7 +178,6 @@ public class EditActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if(task.getResult() == null) return;
                     uploadUri[load_image_counter] = task.getResult().toString();
-                    assert uploadUri != null;
                     load_image_counter++;
                     if (load_image_counter < uploadUri.length) {
                         uploadImage();
@@ -279,8 +278,12 @@ public class EditActivity extends AppCompatActivity {
                     if(!s.equals("empty"))imagesUris.add(s);
                 }
                 imageAdapter.updateImages(imagesUris);
-                String dataText =  1 + "/"  + imagesUris.size();
+                String dataText;
+                if(imagesUris.size() > 0) dataText = 1 + "/" + imagesUris.size();
+                   else  dataText = 0 + "/" + imagesUris.size();
+
                 vtImagesCounter.setText(dataText);
+
 
 
             }

@@ -11,8 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/imMain"
-        app:layout_constraintStart_toStartOf="@+id/imMain"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
         app:layout_constraintTop_toBottomOf="@+id/tvMainTitle">
 
         <TextView
@@ -26,9 +26,9 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/imMain"
-            app:layout_constraintStart_toStartOf="@+id/imMain"
-            app:layout_constraintTop_toBottomOf="@+id/imMain" />
+            app:layout_constraintEnd_toEndOf="@+id/view_pager"
+            app:layout_constraintStart_toStartOf="@+id/view_pager"
+            app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
         <TextView
             android:id="@+id/tvMainTel"
@@ -41,9 +41,9 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/imMain"
-            app:layout_constraintStart_toStartOf="@+id/imMain"
-            app:layout_constraintTop_toBottomOf="@+id/imMain" />
+            app:layout_constraintEnd_toEndOf="@+id/view_pager"
+            app:layout_constraintStart_toStartOf="@+id/view_pager"
+            app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
     </LinearLayout>
 
@@ -52,8 +52,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/imMain"
-        app:layout_constraintStart_toStartOf="@+id/imMain"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <TextView
@@ -67,9 +67,9 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/imMain"
-            app:layout_constraintStart_toStartOf="@+id/imMain"
-            app:layout_constraintTop_toBottomOf="@+id/imMain" />
+            app:layout_constraintEnd_toEndOf="@+id/view_pager"
+            app:layout_constraintStart_toStartOf="@+id/view_pager"
+            app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
         <TextView
             android:id="@+id/tvMainExchange"
@@ -82,14 +82,14 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/imMain"
-            app:layout_constraintStart_toStartOf="@+id/imMain"
-            app:layout_constraintTop_toBottomOf="@+id/imMain" />
+            app:layout_constraintEnd_toEndOf="@+id/view_pager"
+            app:layout_constraintStart_toStartOf="@+id/view_pager"
+            app:layout_constraintTop_toBottomOf="@+id/view_pager" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imMain"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginStart="8dp"
@@ -100,7 +100,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+         />
 
     <TextView
         android:id="@+id/tvMainTitle"
@@ -113,9 +113,22 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imMain"
-        app:layout_constraintStart_toStartOf="@+id/imMain"
-        app:layout_constraintTop_toBottomOf="@+id/imMain" />
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
+        app:layout_constraintTop_toBottomOf="@+id/view_pager" />
+
+    <TextView
+        android:id="@+id/tvImagesCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/black"
+        android:padding="5dp"
+        android:text="0/0"
+        android:textColor="@color/White"
+        app:layout_constraintBottom_toBottomOf="@+id/view_pager"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager" />
 
     <TextView
         android:id="@+id/tvMainDisc"
@@ -129,8 +142,8 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imMain"
-        app:layout_constraintStart_toStartOf="@+id/imMain"
+        app:layout_constraintEnd_toEndOf="@+id/view_pager"
+        app:layout_constraintStart_toStartOf="@+id/view_pager"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -70,6 +70,7 @@ public class ChooseImagesActivity extends AppCompatActivity {
         getImage(3);
     }
 
+    //кагда добавляем картинку, для этого запускаем интэнт и ждем результата, чтобы он нам выдал ссылку на картинку которую мы выбрали
     private void getImage(int index){
         Intent intent = new Intent();
         intent.setType("image/*");
