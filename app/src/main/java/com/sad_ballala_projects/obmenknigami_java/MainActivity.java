@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -131,8 +132,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void onClickEdit(View View){
-        Intent i = new Intent(MainActivity.this, EditActivity.class);
-        startActivityForResult(i, EDIT_RES);
+        if(mAuth.getCurrentUser() != null) {
+            if(mAuth.getCurrentUser().isEmailVerified()){
+            Intent i = new Intent(MainActivity.this, EditActivity.class);
+            startActivityForResult(i, EDIT_RES);} else{
+                showDialog(R.string.alert, R.string.email_not_verified);
+            }
+        }
     }
 
     private void getUserData(){
@@ -145,6 +151,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MAUTH = "";
         }
     }
+
+    private void showDialog(int title, int message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
+    }
+
 
     private void init()
     {
@@ -313,12 +334,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             case R.id.id_sign_up:
-                signUpDialog(R.string.ac_sign_up, R.string.sign_up_action, 0);
+                signUpDialog(R.string.ac_sign_up, R.string.sign_up_action,R.string.google_sign_up, 0);
 
                 break;
 
             case R.id.id_sign_in:
-                signUpDialog(R.string.ac_sign_in, R.string.sign_in_action, 1);
+                signUpDialog(R.string.ac_sign_in, R.string.sign_in_action,R.string.google_sign_in,1);
                 break;
 
             case R.id.id_sign_out:
@@ -328,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void signUpDialog(int title, int buttonTitle, int index){
+    private void signUpDialog(int title, int buttonTitle,int b2Title,final int index){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.sign_up_layout, null);
@@ -362,14 +383,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .addOnCompleteListener(this, (task) ->{
 
                             if (task.isSuccessful()) {
+                                if(task.isSuccessful()){
+                                    if(mAuth.getCurrentUser() != null){
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        sendEmailVerification(user);
+                                    }
+                                    getUserData();
 
-                                getUserData();
 
                             } else {
                                 Log.w("MyLog", "createUserWithEmail:failure", task.getException());
                                 Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-
+                                        Toast.LENGTH_SHORT).show(); }
                             }
 
                     });
@@ -413,6 +438,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
+    private void sendEmailVerification(FirebaseUser user){
+        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    showDialog(R.string.alert, R.string.email_verification_sent);
+                }
+            }
+        });
+    }
+
 
 
 

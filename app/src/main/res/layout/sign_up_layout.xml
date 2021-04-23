@@ -51,4 +51,13 @@
         app:layout_constraintEnd_toEndOf="@+id/edPassword"
         app:layout_constraintStart_toStartOf="@+id/edPassword"
         app:layout_constraintTop_toBottomOf="@+id/edPassword" />
+
+    <Button
+        android:id="@+id/bSignGoogle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/google_sign_up"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSignUp"
+        app:layout_constraintStart_toStartOf="@+id/buttonSignUp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSignUp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

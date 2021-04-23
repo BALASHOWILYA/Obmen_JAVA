@@ -4,18 +4,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.sad_ballala_projects.obmenknigami_java.R;
+import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
+import com.squareup.picasso.Picasso;
 
 public class ChooseImagesActivity extends AppCompatActivity {
-    private String uriMain = "empty"
-            , uri2 = "empty"
-            , uri3 = "empty";
+    private String[] uris = new String[3];
     private ImageView imMain, im2, im3;
-
+    private ImageView imagesViews[] = new  ImageView[3];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +29,13 @@ public class ChooseImagesActivity extends AppCompatActivity {
         imMain = findViewById(R.id.mainImage);
         im2 = findViewById(R.id.image2);
         im3 = findViewById(R.id.image3);
+        uris[0] = "empty";
+        uris[1] = "empty";
+        uris[2] = "empty";
+        imagesViews[0] = imMain;
+        imagesViews[1] = im2;
+        imagesViews[2] = im3;
+        getMyIntent();
     }
 
     @Override
@@ -36,15 +44,15 @@ public class ChooseImagesActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK && data != null && data.getData() != null){
             switch (requestCode){
                 case 1:
-                    uriMain = data.getData().toString();
+                    uris[0] = data.getData().toString();
                     imMain.setImageURI(data.getData());
                     break;
                 case 2:
-                    uri2 = data.getData().toString();
+                    uris[1] = data.getData().toString();
                     im2.setImageURI(data.getData());
                     break;
                 case 3:
-                    uri3 = data.getData().toString();
+                    uris[2] = data.getData().toString();
                     im3.setImageURI(data.getData());
                     break;
             }
@@ -53,9 +61,9 @@ public class ChooseImagesActivity extends AppCompatActivity {
     public  void onClickBack(View view){
 
         Intent i = new Intent();
-        i.putExtra("uriMain", uriMain);
-        i.putExtra("uri2", uri2);
-        i.putExtra("uri3", uri3);
+        i.putExtra("uriMain", uris[0]);
+        i.putExtra("uri2", uris[1]);
+        i.putExtra("uri3", uris[2]);
         setResult(RESULT_OK, i);
         finish();
     }
@@ -78,6 +86,37 @@ public class ChooseImagesActivity extends AppCompatActivity {
         startActivityForResult(intent, index);
     }
 
+    private void getMyIntent(){
+        Intent i = getIntent();
+        if(i != null){
+
+
+             uris[0] = i.getStringExtra(MyConstants.IMAGE_ID);
+             uris[1] = i.getStringExtra(MyConstants.IMAGE_ID_2);
+            uris[2] = i.getStringExtra(MyConstants.IMAGE_ID_3);
+            setImages(uris);
+        }
+    }
+
+    private void setImages(String[] uris){
+
+        for(int i = 0; i < uris.length; i++ ){
+            if(!uris[i].equals("empty"))  showImages(uris[i], i);
+        }
+
+
+    }
+
+    private void showImages(String uri, int position){
+        if(uri.startsWith("http")){
+            Picasso.get().load(uri).into(imagesViews[position]);
+        }
+        else{
+            imagesViews[position].setImageURI(Uri.parse(uri));
+        }
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -86,17 +125,17 @@ public class ChooseImagesActivity extends AppCompatActivity {
 
     public void onClickDeleteMainImage(View view) {
         imMain.setImageResource(android.R.drawable.ic_menu_add);
-        uriMain = "empty";
+        uris[0] = "empty";
 
     }
 
     public void onClickDeleteImage2(View view) {
         im2.setImageResource(android.R.drawable.ic_menu_add);
-        uri2 = "empty";
+        uris[1] = "empty";
     }
 
     public void onClickDeleteImage3(View view) {
         im3.setImageResource(android.R.drawable.ic_menu_add);
-        uri3 = "empty";
+        uris[2] = "empty";
     }
 }

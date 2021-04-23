@@ -49,6 +49,7 @@ public class EditActivity extends AppCompatActivity {
     private Spinner spinner;
     private StorageReference mStorageRef;
     private String[] uploadUri = new String[3];
+    private String[] uploadNewUri = new String[3];
     private DatabaseReference dRef;
     private FirebaseAuth mAuth;
     private EditText edTitle, edTel, edDisc, edChange;
@@ -58,12 +59,13 @@ public class EditActivity extends AppCompatActivity {
     private String temp_time = "";
     private String temp_key = "";
     private String temp_total_views = "";
-    private String temp_image_url = "";
+
     private boolean is_image_update = false;
     private ProgressDialog pd;
     private List<String> imagesUris;
     private ImageAdapter imageAdapter;
     private TextView vtImagesCounter;
+    private ViewPager vp;
 
     private int load_image_counter = 0;
 
@@ -79,8 +81,8 @@ public class EditActivity extends AppCompatActivity {
 
         vtImagesCounter = findViewById(R.id.tvImagesCounter);
         imagesUris = new ArrayList<>();
+        vp = findViewById(R.id.view_pager);
 
-        ViewPager vp = findViewById(R.id.view_pager);
         imageAdapter = new ImageAdapter(this);
         vp.setAdapter(imageAdapter);
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -100,9 +102,6 @@ public class EditActivity extends AppCompatActivity {
 
             }
         });
-
-
-
         uploadUri[0] = "empty";
         uploadUri[1] = "empty";
         uploadUri[2] = "empty";
@@ -134,16 +133,34 @@ public class EditActivity extends AppCompatActivity {
 
     private void setDataAds(Intent i){
        // Picasso.get().load(i.getStringExtra(MyConstants.IMAGE_ID)).into(imItem);
-        edTel.setText(i.getStringExtra(MyConstants.TEL));
+
         edTitle.setText(i.getStringExtra(MyConstants.TITLE));
         edChange.setText(i.getStringExtra(MyConstants.CHANGE));
+        edTel.setText(i.getStringExtra(MyConstants.TEL));
         edDisc.setText(i.getStringExtra(MyConstants.DISC));
         temp_cat = i.getStringExtra(MyConstants.CAT);
         temp_uid = i.getStringExtra(MyConstants.UID);
         temp_time = i.getStringExtra(MyConstants.TIME);
         temp_key = i.getStringExtra(MyConstants.KEY);
-        temp_image_url = i.getStringExtra(MyConstants.IMAGE_ID);
+        uploadUri[0] = i.getStringExtra(MyConstants.IMAGE_ID);
+        uploadUri[1] = i.getStringExtra(MyConstants.IMAGE_ID_2);
+        uploadUri[2] = i.getStringExtra(MyConstants.IMAGE_ID_3);
         temp_total_views = i.getStringExtra(MyConstants.TOTAL_VIEWS);
+
+
+        for (String s : uploadUri){
+            if(!s.equals("empty"))
+            {imagesUris.add(s);}
+        }
+        imageAdapter.updateImages(imagesUris);
+
+        String dataText;
+        if(imagesUris.size() > 0)
+            dataText = 1 + "/"  + imagesUris.size();
+        else dataText = 0 + "/"  + imagesUris.size();
+        vtImagesCounter.setText(dataText);
+
+
 
 
     }
@@ -206,41 +223,88 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void uploadUpdateImage(){
+
         Bitmap bitMap = null;
-        try {
-            bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(),Uri.parse(uploadUri[load_image_counter]));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(load_image_counter < uploadUri.length) {
+            //1- Если ссылка на старой позиции равна ссылке на новой позиции
+            if(uploadUri[load_image_counter].equals(uploadNewUri[load_image_counter])){
+                load_image_counter++;
+                uploadUpdateImage();
+            }
+            //2- Если ссылка на старой позиции не равна ссылке на новой позиции и ссылска на новой позиции не "empty"
+            else if(!uploadUri[load_image_counter].equals(uploadNewUri[load_image_counter]) &&
+                    !uploadNewUri[load_image_counter].equals("empty")){
+
+                try {
+                    bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(uploadNewUri[load_image_counter]));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            //3 если в старом массиве не "empty" ф в новом на той же позиции empty значит удалить старую ссылку и картинку
+            } else if(!uploadUri[load_image_counter].equals("empty") && uploadNewUri[load_image_counter].equals("empty")){
+                StorageReference mRef = FirebaseStorage.getInstance().getReferenceFromUrl(uploadUri[load_image_counter]);
+                mRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        uploadUri[load_image_counter] = "empty";
+                        load_image_counter++;
+                        if(load_image_counter < uploadUri.length){
+                            uploadUpdateImage();
+                        } else{
+                            updatePost();
+
+                        }
+                    }
+                });
+            }
+
+            if(bitMap == null ) return;
+
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            byte[] byteArray = out.toByteArray();
+            final StorageReference mRef;
+
+
+            if(!uploadUri[load_image_counter].equals("empty")){
+                // 2 - A если ссылка на старой по позиции не равна empty то перезаписываем старую на новую
+                mRef = FirebaseStorage.getInstance().getReferenceFromUrl(uploadUri[load_image_counter]);
+            } else{
+                // 2 - B если ссылка на старой позиции  равна empty то записываем новую картинку  на firebase
+                mRef  = mStorageRef.child(System.currentTimeMillis() + "image");
+            }
+
+
+
+
+            UploadTask up = mRef.putBytes(byteArray);
+            Task<Uri> task = up.continueWithTask(task1 -> mRef.getDownloadUrl())
+                    .addOnCompleteListener(task12 -> {
+                        uploadUri[load_image_counter] = task12.getResult().toString();
+
+                        load_image_counter++;
+                        if(load_image_counter < uploadUri.length){
+                            uploadUpdateImage();
+                        } else{
+                            updatePost();
+
+                        }
+
+
+                       //savePost();
+
+
+                    }).addOnFailureListener(e -> {
+
+                    });
+        } else{
+            updatePost();
+
+
         }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        assert bitMap != null;
-        bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        byte[] byteArray = out.toByteArray();
-        final StorageReference mRef = FirebaseStorage.getInstance().getReferenceFromUrl(temp_image_url);
-        UploadTask up = mRef.putBytes(byteArray);
-        Task<Uri> task = up.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                return mRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                uploadUri[load_image_counter] = task.getResult().toString();
-                assert uploadUri != null;
-                temp_image_url = uploadUri.toString();
-                updatePost();
-                savePost();
-                Toast.makeText(EditActivity.this, "Upload done !" , Toast.LENGTH_LONG).show();
-                finish();
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        });
     }
 
     public void onClickSavePost(View View){
@@ -267,19 +331,17 @@ public class EditActivity extends AppCompatActivity {
         if(requestCode == 15 && data != null){
             if(resultCode == RESULT_OK){
 
-                Log.d("MyLog", "Uri main" + data.getStringExtra("uriMain"));
-                Log.d("MyLog", "Uri 2" + data.getStringExtra("uri2"));
-                Log.d("MyLog", "Uri 3" + data.getStringExtra("uri3"));
-                uploadUri[0] = data.getStringExtra("uriMain");
-                uploadUri[1] = data.getStringExtra("uri2");
-                uploadUri[2] = data.getStringExtra("uri3");
+
+                is_image_update = true;
+
+
                 imagesUris.clear();
-                for (String s : uploadUri){
+                for (String s : getUrisFromChoose(data)){
                     if(!s.equals("empty"))imagesUris.add(s);
                 }
                 imageAdapter.updateImages(imagesUris);
                 String dataText;
-                if(imagesUris.size() > 0) dataText = 1 + "/" + imagesUris.size();
+                if(imagesUris.size() > 0) dataText = vp.getCurrentItem() + 1 + "/" + imagesUris.size();
                    else  dataText = 0 + "/" + imagesUris.size();
 
                 vtImagesCounter.setText(dataText);
@@ -291,8 +353,28 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
+    private String[] getUrisFromChoose(Intent data){
+        if(edit_state){
+            uploadNewUri[0] = data.getStringExtra("uriMain");
+            uploadNewUri[1] = data.getStringExtra("uri2");
+            uploadNewUri[2] = data.getStringExtra("uri3");
+            return uploadNewUri;
+        }
+        else {
+            uploadUri[0] = data.getStringExtra("uriMain");
+            uploadUri[1] = data.getStringExtra("uri2");
+            uploadUri[2] = data.getStringExtra("uri3");
+            return  uploadUri;
+        }
+
+    }
+
     public void OnClickImage(View View){
         Intent i = new Intent(EditActivity.this, ChooseImagesActivity.class);
+
+            i.putExtra(MyConstants.IMAGE_ID, uploadUri[0]);
+            i.putExtra(MyConstants.IMAGE_ID_2, uploadUri[1]);
+            i.putExtra(MyConstants.IMAGE_ID_3, uploadUri[2]);
         startActivityForResult(i, 15);
 
     }
@@ -303,7 +385,9 @@ public class EditActivity extends AppCompatActivity {
 
 
             NewPost post = new NewPost();
-            post.setImageId(temp_image_url);
+            post.setImageId(uploadUri[0]);
+            post.setImageId2(uploadUri[1]);
+            post.setImageId3(uploadUri[2]);
             post.setTitle(edTitle.getText().toString());
             post.setChange(edChange.getText().toString());
             post.setTel(edTel.getText().toString());
@@ -313,11 +397,18 @@ public class EditActivity extends AppCompatActivity {
             post.setTime(temp_time);
             post.setUid(temp_uid);
             post.setTotal_views(temp_total_views);
-
+            //addOnCompleteListener слушатель на второстипенном патоке
             // создаем новую подпапку, название папки зависит от Uid, далее создается объявление с помощью key, а затем помещаем туда значение
-            dRef.child(temp_key).child("ads").setValue(post);
+            dRef.child(temp_key).child("ads").setValue(post).
+                    addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(EditActivity.this, "Upload done !", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
 
-            finish();
+
 
     }
 
