@@ -45,6 +45,7 @@ import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sad_ballala_projects.obmenknigami_java.accountHelper.AccountHelper;
 import com.sad_ballala_projects.obmenknigami_java.adapter.DataSender;
 import com.sad_ballala_projects.obmenknigami_java.adapter.PostAdapter;
 
@@ -69,9 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String current_cat = "научная литература";
     private final int EDIT_RES = 12;
     private AdView adView;
-    //Google Sign In
-    private GoogleSignInClient mSignInClient;
-    public static final int GOOGLE_SIGN_IN_CODE = 10;
+    private AccountHelper accountHelper;
+
 
 
     @Override
@@ -103,13 +103,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     current_cat = data.getStringExtra("cat");
                 }
                 break;
-            case GOOGLE_SIGN_IN_CODE:
+            case AccountHelper.GOOGLE_SIGN_IN_CODE:
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
                 try {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     if(account != null)
-                    signInFirebaseGoogle(account.getIdToken());
+                   accountHelper.signInFirebaseGoogle(account.getIdToken());
                 } catch (ApiException e) {
                     e.printStackTrace();
                 }
@@ -165,12 +165,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(mAuth.getCurrentUser().isEmailVerified()){
             Intent i = new Intent(MainActivity.this, EditActivity.class);
             startActivityForResult(i, EDIT_RES);} else{
-                showDialog(R.string.alert, R.string.email_not_verified);
+                accountHelper.showDialog(R.string.alert, R.string.email_not_verified);
             }
         }
     }
 
-    private void getUserData(){
+    public void getUserData(){
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             userEmail.setText(currentUser.getEmail());
@@ -180,21 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MAUTH = "";
         }
     }
-
-    private void showDialog(int title, int message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.create();
-        builder.show();
-    }
-
 
     private void init()
     {
@@ -215,10 +200,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         nav_view.setNavigationItemSelectedListener(this);
         userEmail = nav_view.getHeaderView(0).findViewById(R.id.tvEmail);
+
         mAuth = FirebaseAuth.getInstance();
+        accountHelper = new AccountHelper(mAuth, this);
+
+       // test
         getDataDB();
         dbManager = new DbManager(dataSender, this);
-        //
         postAdapter.setDbManager(dbManager);
 
     }
@@ -232,9 +220,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
     }
-
-
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -372,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.id_sign_out:
-                signOut();
+                accountHelper.signOut();
                 break;
         }
         return true;
@@ -394,18 +379,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         b.setOnClickListener((v) ->{
 
                 if(index == 0){
-                    signUp(edEmail.getText().toString(),edPassword.getText().toString());
+                    accountHelper.signUp(edEmail.getText().toString(),edPassword.getText().toString());
                 } else{
-                    signIn(edEmail.getText().toString(), edPassword.getText().toString());
+                    accountHelper.signIn(edEmail.getText().toString(), edPassword.getText().toString());
                 }
                 dialog.dismiss();
         });
         b2.setOnClickListener((v) ->{
             if(mAuth.getCurrentUser() != null){
+                dialog.dismiss();
                 return;
             } else{
-                googleAccountManager();
-                signInGoogle();
+
+                accountHelper.signInGoogle();
             }
             dialog.dismiss();
         });
@@ -416,103 +402,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void signUp(String email, String password) {
-
-        if (!email.equals("") && !password.equals("")) {
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, (task) ->{
-
-                            if (task.isSuccessful()) {
-                                if(task.isSuccessful()){
-                                    if(mAuth.getCurrentUser() != null){
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        sendEmailVerification(user);
-                                    }
-                                    getUserData();
-
-
-                            } else {
-                                Log.w("MyLog", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show(); }
-                            }
-
-                    });
-        } else{
-            Toast.makeText(this, "Email or Password is empty.",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    private void signIn(String email, String password) {
-        if (!email.equals("") && !password.equals("")) {
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                getUserData();
-
-                            } else {
-                                Log.w("MyLog", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-        }
-        else{
-            Toast.makeText(this, "Email or Password is empty", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void signOut(){
-        mAuth.signOut();
-        getUserData();
-    }
-
-    private void googleAccountManager(){
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
-                requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-        mSignInClient = GoogleSignIn.getClient(this, gso);
-    }
-
-    private void signInGoogle(){
-        Intent signInIntent = mSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_CODE);
-    }
-
-    private void signInFirebaseGoogle(String idToken ){
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "Log In done", Toast.LENGTH_SHORT).show();
-                } else{
-
-                }
-            }
-        });
-    }
-
     private void addAds(){
         MobileAds.initialize(this);
         adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
-    private void sendEmailVerification(FirebaseUser user){
-        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    showDialog(R.string.alert, R.string.email_verification_sent);
-                }
-            }
-        });
-    }
+
 
 
 
