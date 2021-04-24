@@ -28,6 +28,9 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String current_cat = "научная литература";
     private final int EDIT_RES = 12;
     private AdView adView;
+    //Google Sign In
+    private GoogleSignInClient mSignInClient;
+    public static final int GOOGLE_SIGN_IN_CODE = 10;
 
 
     @Override
@@ -357,9 +363,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView titleTextView = dialogView.findViewById(R.id.tvAlertTitle);
         titleTextView.setText(title);
         Button b = dialogView.findViewById(R.id.buttonSignUp);
+        Button b2 = dialogView.findViewById(R.id.bSignGoogle);
         EditText edEmail = dialogView.findViewById(R.id.edEmail);
         EditText edPassword = dialogView.findViewById(R.id.edPassword);
         b.setText(buttonTitle);
+        b2.setText(b2Title);
         b.setOnClickListener((v) ->{
 
                 if(index == 0){
@@ -368,6 +376,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     signIn(edEmail.getText().toString(), edPassword.getText().toString());
                 }
                 dialog.dismiss();
+        });
+        b2.setOnClickListener((v) ->{
+            if(mAuth.getCurrentUser() != null){
+                return;
+            } else{
+                googleAccountManager();
+                signInGoogle();
+            }
+            dialog.dismiss();
         });
         dialog = dialogBuilder.create();
         dialog.show();
@@ -430,6 +447,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void signOut(){
         mAuth.signOut();
         getUserData();
+    }
+
+    private void googleAccountManager(){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).
+                requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        mSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
+    private void signInGoogle(){
+        Intent signInIntent = mSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_CODE);
     }
 
     private void addAds(){

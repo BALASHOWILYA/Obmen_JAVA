@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "969546345574",
+    "firebase_url": "https://obmenjava-default-rtdb.firebaseio.com",
     "project_id": "obmenjava",
     "storage_bucket": "obmenjava.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "969546345574-j42l5t7n8vmbdve4on0194tahohq30kk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sad_ballala_projects.obmenknigami_java",
+            "certificate_hash": "7ad6d811fe95f77985741bc78b8af8f2bb99650c"
+          }
+        },
         {
           "client_id": "969546345574-prq7iqbcahihs3do8o84kbsq5toplv1h.apps.googleusercontent.com",
           "client_type": 3
