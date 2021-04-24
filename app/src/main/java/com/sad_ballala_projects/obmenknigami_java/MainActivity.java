@@ -29,15 +29,20 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sad_ballala_projects.obmenknigami_java.adapter.DataSender;
@@ -91,8 +96,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == EDIT_RES && resultCode == RESULT_OK && data != null){
-            current_cat = data.getStringExtra("cat");
+
+        switch (requestCode){
+            case EDIT_RES:
+                if( resultCode == RESULT_OK && data != null){
+                    current_cat = data.getStringExtra("cat");
+                }
+                break;
+            case GOOGLE_SIGN_IN_CODE:
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    if(account != null)
+                    signInFirebaseGoogle(account.getIdToken());
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+
         }
     }
 
@@ -458,6 +481,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void signInGoogle(){
         Intent signInIntent = mSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN_CODE);
+    }
+
+    private void signInFirebaseGoogle(String idToken ){
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(MainActivity.this, "Log In done", Toast.LENGTH_SHORT).show();
+                } else{
+
+                }
+            }
+        });
     }
 
     private void addAds(){
