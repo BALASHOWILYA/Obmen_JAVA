@@ -68,17 +68,17 @@
     <string name="select_city">*Выберите город</string>
 
     <!-- Edit Activity -->
-    <string name="Main_photo"></string>
-    <string name="Second_photo"></string>
-    <string name="Third_photo"></string>
+    <string name="Main_photo" translatable="false"></string>
+    <string name="Second_photo" translatable="false"></string>
+    <string name="Third_photo" translatable="false"></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_book_name">Название книги</string>
-    <string name="edit_discription">disctiption</string>
+    <string name="edit_discription">Описание</string>
     <string name="edit_phone">Как с вами связаться</string>
     <string name="change">предложите обмен</string>
     <string name="id_my_ads">мои объявления</string>
-    <string name="my_ads">my ads</string>
+    <string name="my_ads">мои объявления</string>
 
     <!--Main Activity  -->
     <string name="delete_title">Удалить объявление?</string>
@@ -89,7 +89,7 @@
     <string name="Item_be_not_deleted">An error occurred, item be not deleted</string>
     <string name="item_deleted">Объявление удалено успешно!</string>
     <string name="ok" translatable="false">Ок</string>
-    <string name="alert">Attention!</string>
+    <string name="alert">Внимание!</string>
     <string name="email_not_verified">почта не подтверждена, зайдите на вашу почту и подтвердите вашь аккаунт!</string>
     <string name="email_verification_sent">Вам на почту было отправлено сообщение,
         пожалуйста перейдите по ссылке в сообщении для подтверждения вашего аккаунта!</string>
@@ -105,6 +105,8 @@
     <string name="image3">Photo 3ed</string>
     <string name="google_sign_up">Google Sign Up</string>
     <string name="google_sign_in">Google Sign In</string>
+    <string name="send_email_again">Отправить снова</string>
+    <string name="sign_link_message">У вас уже есть аккаунт с этим Email адресом, войдите в вашь существующий аккаунт</string>
 
 
 </resources>

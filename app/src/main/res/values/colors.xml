@@ -9,4 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="White">#F7F1F1</color>
     <color name="gray">#535252</color>
+    <color name="red">#FFC672</color>
+    <color name="dark_red">#AC4C45</color>
+    <color name="tooDarkRed">#8F2C25</color>
+    <color name="RED">#D51305</color>
+    <color name="lightRed">#CC7D78</color>
+    <color name="Light">#FDD0CD</color>
+    <color name="blue">#72BFFC</color>
+    <color name="tooblue">#3C59FA</color>
 </resources>

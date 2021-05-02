@@ -2,6 +2,7 @@ package com.sad_ballala_projects.obmenknigami_java;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -109,7 +114,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 try {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     if(account != null)
-                   accountHelper.signInFirebaseGoogle(account.getIdToken());
+                   accountHelper.signInFirebaseGoogle(account.getIdToken(), 0);
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+            case AccountHelper.GOOGLE_SIGN_IN_LINK_CODE:
+                Task<GoogleSignInAccount> task2 = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+                try {
+                    GoogleSignInAccount account = task2.getResult(ApiException.class);
+                    if(account != null)
+                        accountHelper.signInFirebaseGoogle(account.getIdToken(), 1);
                 } catch (ApiException e) {
                     e.printStackTrace();
                 }
@@ -162,10 +179,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void onClickEdit(View View){
         if(mAuth.getCurrentUser() != null) {
-            if(mAuth.getCurrentUser().isEmailVerified()){
-            Intent i = new Intent(MainActivity.this, EditActivity.class);
-            startActivityForResult(i, EDIT_RES);} else{
-                accountHelper.showDialog(R.string.alert, R.string.email_not_verified);
+            if(mAuth.getCurrentUser().isEmailVerified()) {
+                Intent i = new Intent(MainActivity.this, EditActivity.class);
+                startActivityForResult(i, EDIT_RES);
+            } else{
+                accountHelper.showDialogNotVerified(R.string.alert, R.string.email_not_verified);
             }
         }
     }
@@ -180,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MAUTH = "";
         }
     }
+
 
     private void init()
     {
@@ -209,6 +228,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dbManager = new DbManager(dataSender, this);
         postAdapter.setDbManager(dbManager);
 
+
+
+
+        Menu menu = nav_view.getMenu();
+        MenuItem categoryAccountItem = menu.findItem(R.id.school_book_id);
+        SpannableString sp = new SpannableString(categoryAccountItem.getTitle());
+        sp.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.dark_red)), 0,sp.length(), 0 );
+        categoryAccountItem.setTitle(sp);
     }
 
     private void getDataDB(){
@@ -391,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return;
             } else{
 
-                accountHelper.signInGoogle();
+                accountHelper.signInGoogle(AccountHelper.GOOGLE_SIGN_IN_CODE);
             }
             dialog.dismiss();
         });

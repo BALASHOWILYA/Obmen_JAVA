@@ -120,6 +120,7 @@
         android:clickable="true"
         android:onClick="onClickSavePost"
         android:src="@drawable/ic_save"
+        app:backgroundTint="@color/tooblue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -105,6 +105,8 @@
     <string name="image3">Фото 3</string>
     <string name="google_sign_up">Регистрация через  Google</string>
     <string name="google_sign_in">Вход через Google</string>
+    <string name="send_email_again">Отправить снова</string>
+    <string name="sign_link_message">У вас уже есть аккаунт с этим Email адресом, войдите в вашь существующий аккаунт</string>
 
 
 </resources>

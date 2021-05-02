@@ -13,7 +13,7 @@
 
 
 
-<item android:title="@string/school_textbooks">
+<item android:title="@string/school_textbooks" android:id="@+id/school_book_id">
         <menu>
 
             <item
@@ -77,7 +77,7 @@
         </menu>
     </item>
 
-    <item android:title="@string/Different_types_of_books">
+    <item android:title="@string/Different_types_of_books"  android:id="@+id/school_catbook_id">
         <menu>
             <item
                 android:title="@string/a_science_book"
