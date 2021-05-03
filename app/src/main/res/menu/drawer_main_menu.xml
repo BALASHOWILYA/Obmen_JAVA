@@ -188,17 +188,8 @@
     <item android:title="@string/ac"
         >
         <menu>
-            <item
-                android:title="@string/ac_sign_up"
-                android:id="@+id/id_sign_up"
-                android:icon="@drawable/ic_sign_up"
-                />
 
-            <item
-                android:title="@string/ac_sign_in"
-                android:id="@+id/id_sign_in"
-                android:icon="@drawable/ic_sign_in"
-                />
+
 
             <item
                 android:title="@string/ac_sign_out"

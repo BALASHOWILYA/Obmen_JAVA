@@ -39,7 +39,7 @@ public class AccountHelper {
         googleAccountManager();
     }
     //Sign Up by Email
-    /*public void signUp(String email, String password) {
+    public void signUp(String email, String password) {
 
         if (!email.equals("") && !password.equals("")) {
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -70,7 +70,7 @@ public class AccountHelper {
         }
 
     }
-*/
+
     public void signIn(String email, String password) {
         if (!email.equals("") && !password.equals("")) {
             mAuth.signInWithEmailAndPassword(email, password)
@@ -97,6 +97,10 @@ public class AccountHelper {
         mAuth.signOut();
         mSignInClient.signOut();
         activity.getUserData();
+        Intent i = new Intent(activity, SignInAct.class);
+        activity.startActivity(i);
+
+
     }
 
     private void sendEmailVerification(FirebaseUser user){
@@ -187,7 +191,7 @@ public class AccountHelper {
         builder.create();
         builder.show();
     }
-/*
+
     private void linkEmailAndPassword(String email, String password){
         AuthCredential credential = EmailAuthProvider.getCredential(email, password);
         if(mAuth.getCurrentUser() != null){
@@ -218,6 +222,6 @@ public class AccountHelper {
             showDialogSignInWithLink(R.string.alert,R.string.sign_link_message);
         }
     }
-*/
+
 
 }

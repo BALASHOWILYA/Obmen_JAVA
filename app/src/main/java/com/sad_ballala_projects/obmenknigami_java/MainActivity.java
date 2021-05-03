@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         addAds();
         init();
+        accountHelper.signInGoogle(AccountHelper.GOOGLE_SIGN_IN_CODE);
+
+
     }
 
     private void setOnItemClickCustom(){
@@ -374,14 +377,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
 
-            case R.id.id_sign_up:
-                signUpDialog(R.string.ac_sign_up, R.string.sign_up_action,R.string.google_sign_up, 0);
-
-                break;
-
-            case R.id.id_sign_in:
-                signUpDialog(R.string.ac_sign_in, R.string.sign_in_action,R.string.google_sign_in,1);
-                break;
 
             case R.id.id_sign_out:
                 accountHelper.signOut();
@@ -390,44 +385,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void signUpDialog(int title, int buttonTitle,int b2Title,final int index){
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.sign_up_layout, null);
-        dialogBuilder.setView(dialogView);
-        TextView titleTextView = dialogView.findViewById(R.id.tvAlertTitle);
-        titleTextView.setText(title);
-        Button b = dialogView.findViewById(R.id.buttonSignUp);
-        Button b2 = dialogView.findViewById(R.id.bSignGoogle);
-        EditText edEmail = dialogView.findViewById(R.id.edEmail);
-        EditText edPassword = dialogView.findViewById(R.id.edPassword);
-        b.setText(buttonTitle);
-        b2.setText(b2Title);
-        b.setOnClickListener((v) ->{
-
-                if(index == 0){
-                    accountHelper.signUp(edEmail.getText().toString(),edPassword.getText().toString());
-                } else{
-                    accountHelper.signIn(edEmail.getText().toString(), edPassword.getText().toString());
-                }
-                dialog.dismiss();
-        });
-        b2.setOnClickListener((v) ->{
-            if(mAuth.getCurrentUser() != null){
-                dialog.dismiss();
-                return;
-            } else{
-
-                accountHelper.signInGoogle(AccountHelper.GOOGLE_SIGN_IN_CODE);
-            }
-            dialog.dismiss();
-        });
-        dialog = dialogBuilder.create();
-        dialog.show();
-
-
-
-    }
 
     private void addAds(){
         MobileAds.initialize(this);
