@@ -6,9 +6,16 @@
 
 
 
+
     <item
         android:title="@string/my_ads"
         android:id="@+id/id_my_ads"
+        />
+
+    <item
+        android:title="@string/a_science_book"
+        android:id="@+id/id_a_science_book"
+        android:icon="@drawable/ic_my_books"
         />
 
 
@@ -79,11 +86,7 @@
 
     <item android:title="@string/Different_types_of_books"  android:id="@+id/school_catbook_id">
         <menu>
-            <item
-                android:title="@string/a_science_book"
-                android:id="@+id/id_a_science_book"
-                android:icon="@drawable/ic_my_books"
-                />
+
 
             <item
                 android:title="@string/a_humorous_story"

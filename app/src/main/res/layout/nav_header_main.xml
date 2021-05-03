@@ -6,16 +6,6 @@
     android:layout_height="@dimen/nav_header_height"
     android:background="@color/tooblue">
 
-    <ImageView
-        android:id="@+id/imPhoto"
-        android:layout_width="@dimen/nav_header_photo"
-        android:layout_height="@dimen/nav_header_photo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
@@ -33,6 +23,16 @@
         app:layout_constraintTop_toBottomOf="@+id/imPhoto" />
 
     <ImageView
+        android:id="@+id/imPhoto"
+        android:layout_width="@dimen/nav_header_photo"
+        android:layout_height="@dimen/nav_header_photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -45,4 +45,5 @@
         app:srcCompat="@drawable/book4"
 
         />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

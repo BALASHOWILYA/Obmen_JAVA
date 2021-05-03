@@ -2,20 +2,15 @@ package com.sad_ballala_projects.obmenknigami_java;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -27,7 +22,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.android.gms.ads.AdRequest;
@@ -35,27 +29,17 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthCredential;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.sad_ballala_projects.obmenknigami_java.accountHelper.AccountHelper;
 import com.sad_ballala_projects.obmenknigami_java.adapter.DataSender;
 import com.sad_ballala_projects.obmenknigami_java.adapter.PostAdapter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -86,10 +70,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         addAds();
         init();
-        accountHelper.signInGoogle(AccountHelper.GOOGLE_SIGN_IN_CODE);
+        if(mAuth.getCurrentUser() != null){
+
+        } else{
+            signUpDialog(R.string.google_sign_in);
+        }
+
+
+
+           // accountHelper.signInGoogle(AccountHelper.GOOGLE_SIGN_IN_CODE);
+
+           // Intent i = new Intent(this, SignInAct.class);
+            //startActivity(i);
+
 
 
     }
+
+
+
 
     private void setOnItemClickCustom(){
         onItemClickCustom = new PostAdapter.OnItemClickCustom() {
@@ -118,18 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     GoogleSignInAccount account = task.getResult(ApiException.class);
                     if(account != null)
                    accountHelper.signInFirebaseGoogle(account.getIdToken(), 0);
-                } catch (ApiException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-            case AccountHelper.GOOGLE_SIGN_IN_LINK_CODE:
-                Task<GoogleSignInAccount> task2 = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-                try {
-                    GoogleSignInAccount account = task2.getResult(ApiException.class);
-                    if(account != null)
-                        accountHelper.signInFirebaseGoogle(account.getIdToken(), 1);
                 } catch (ApiException e) {
                     e.printStackTrace();
                 }
@@ -376,13 +363,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dbManager.getDataFromBd("учебники за 11 класс");
                 break;
 
-
-
             case R.id.id_sign_out:
                 accountHelper.signOut();
+                signUpDialog(R.string.google_sign_in);
                 break;
         }
         return true;
+    }
+
+    private void signUpDialog(int bTitle){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.sign_up_layout, null);
+        dialogBuilder.setView(dialogView);
+        SignInButton b2 = dialogView.findViewById(R.id.bSignGoogle);
+
+        b2.setOnClickListener((v) ->{
+           if(mAuth.getCurrentUser() != null){
+               dialog.dismiss();
+                return;
+           } else{
+
+                accountHelper.signInGoogle(AccountHelper.GOOGLE_SIGN_IN_CODE);
+           }
+            dialog.dismiss();
+        });
+        dialog = dialogBuilder.create();
+        if(dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
     }
 
 

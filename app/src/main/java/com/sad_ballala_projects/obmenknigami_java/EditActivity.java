@@ -181,7 +181,7 @@ public class EditActivity extends AppCompatActivity {
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             assert bitMap != null;
-            bitMap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitMap.compress(Bitmap.CompressFormat.JPEG, 70, out);
             byte[] byteArray = out.toByteArray();
             final StorageReference mRef = mStorageRef.child(System.currentTimeMillis() + "image");
             UploadTask up = mRef.putBytes(byteArray);

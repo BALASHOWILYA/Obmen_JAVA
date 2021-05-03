@@ -11,8 +11,7 @@
         android:theme="@style/Theme.ObmenKnigami_Java.NoToolBar">
         <activity android:name=".screens.ChooseImagesActivity"></activity>
         <activity android:name=".ShowLayoutActivity" />
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".accountHelper.SignInAct">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
