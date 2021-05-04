@@ -4,19 +4,26 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.images.ImageManager;
 import com.sad_ballala_projects.obmenknigami_java.R;
+import com.sad_ballala_projects.obmenknigami_java.utils.ImagesManager;
 import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
+import com.sad_ballala_projects.obmenknigami_java.utils.OnBitMapLoaded;
 import com.squareup.picasso.Picasso;
 
 public class ChooseImagesActivity extends AppCompatActivity {
     private String[] uris = new String[3];
     private ImageView imMain, im2, im3;
     private ImageView imagesViews[] = new  ImageView[3];
+    private ImagesManager imageManager;
+    private OnBitMapLoaded onBitMapLoaded;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +43,10 @@ public class ChooseImagesActivity extends AppCompatActivity {
         imagesViews[1] = im2;
         imagesViews[2] = im3;
         getMyIntent();
+        setOnBitMapLoaded();
+        imageManager = new ImagesManager(this, onBitMapLoaded );
+
+
     }
 
     @Override
@@ -45,19 +56,39 @@ public class ChooseImagesActivity extends AppCompatActivity {
             switch (requestCode){
                 case 1:
                     uris[0] = data.getData().toString();
-                    imMain.setImageURI(data.getData());
+                    imageManager.setImageIndex(0);
+                    imageManager.resizeLargeImage(uris[0]);
+
                     break;
                 case 2:
                     uris[1] = data.getData().toString();
-                    im2.setImageURI(data.getData());
+                    imageManager.setImageIndex(1);
+                    imageManager.resizeLargeImage(uris[1]);
                     break;
                 case 3:
                     uris[2] = data.getData().toString();
-                    im3.setImageURI(data.getData());
+                    imageManager.setImageIndex(2);
+                    imageManager.resizeLargeImage(uris[2]);
                     break;
             }
         }
     }
+
+    private void setOnBitMapLoaded(){
+        onBitMapLoaded = new OnBitMapLoaded() {
+            @Override
+            public void onBitMapLoaded(Bitmap bitmap, int index) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imagesViews[index].setImageBitmap(bitmap);
+                    }
+                });
+            }
+        };
+    }
+
+
     public  void onClickBack(View view){
 
         Intent i = new Intent();

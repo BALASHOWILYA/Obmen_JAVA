@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.common.images.ImageManager;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sad_ballala_projects.obmenknigami_java.adapter.ImageAdapter;
 import com.sad_ballala_projects.obmenknigami_java.screens.ChooseImagesActivity;
+import com.sad_ballala_projects.obmenknigami_java.utils.ImagesManager;
 import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +48,7 @@ import java.util.concurrent.atomic.AtomicMarkableReference;
 
 public class EditActivity extends AppCompatActivity {
     // Create a Cloud Storage reference from the app
+    private final int MAX_UPLOAD_IMAGE_SIZE = 1000;
     private Spinner spinner;
     private StorageReference mStorageRef;
     private String[] uploadUri = new String[3];
@@ -180,7 +183,11 @@ public class EditActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
+
             assert bitMap != null;
+
+
+            bitMap = ImagesManager.resizeImage(bitMap, MAX_UPLOAD_IMAGE_SIZE);
             bitMap.compress(Bitmap.CompressFormat.JPEG, 70, out);
             byte[] byteArray = out.toByteArray();
             final StorageReference mRef = mStorageRef.child(System.currentTimeMillis() + "image");
