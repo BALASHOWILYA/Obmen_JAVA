@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.images.ImageManager;
 import com.sad_ballala_projects.obmenknigami_java.R;
@@ -17,12 +18,17 @@ import com.sad_ballala_projects.obmenknigami_java.utils.MyConstants;
 import com.sad_ballala_projects.obmenknigami_java.utils.OnBitMapLoaded;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ChooseImagesActivity extends AppCompatActivity {
     private String[] uris = new String[3];
     private ImageView imMain, im2, im3;
     private ImageView imagesViews[] = new  ImageView[3];
-    private ImagesManager imageManager;
+    private ImagesManager imagesManager;
     private OnBitMapLoaded onBitMapLoaded;
+    private boolean isImagesLoaded = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +49,8 @@ public class ChooseImagesActivity extends AppCompatActivity {
         imagesViews[1] = im2;
         imagesViews[2] = im3;
         getMyIntent();
-        setOnBitMapLoaded();
-        imageManager = new ImagesManager(this, onBitMapLoaded );
+        onBitMapLoaded();
+        imagesManager = new ImagesManager(this, onBitMapLoaded );
 
 
     }
@@ -56,32 +62,35 @@ public class ChooseImagesActivity extends AppCompatActivity {
             switch (requestCode){
                 case 1:
                     uris[0] = data.getData().toString();
-                    imageManager.setImageIndex(0);
-                    imageManager.resizeLargeImage(uris[0]);
+                    isImagesLoaded = false;
+                    imagesManager.resizeMultiLargeImages(Arrays.asList(uris));
 
                     break;
                 case 2:
                     uris[1] = data.getData().toString();
-                    imageManager.setImageIndex(1);
-                    imageManager.resizeLargeImage(uris[1]);
+                    isImagesLoaded = false;
+                    imagesManager.resizeMultiLargeImages(Arrays.asList(uris));
                     break;
                 case 3:
                     uris[2] = data.getData().toString();
-                    imageManager.setImageIndex(2);
-                    imageManager.resizeLargeImage(uris[2]);
+                    isImagesLoaded = false;
+                    imagesManager.resizeMultiLargeImages(Arrays.asList(uris));
                     break;
             }
         }
     }
 
-    private void setOnBitMapLoaded(){
+    private void onBitMapLoaded(){
         onBitMapLoaded = new OnBitMapLoaded() {
             @Override
-            public void onBitMapLoaded(Bitmap bitmap, int index) {
+            public void onBitMapLoaded(final List<Bitmap> bitmap) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        imagesViews[index].setImageBitmap(bitmap);
+                        for (int i = 0; i < bitmap.size(); i++) {
+                            if (bitmap.get(i) != null) imagesViews[i].setImageBitmap(bitmap.get(i));
+                        }
+                        isImagesLoaded = true;
                     }
                 });
             }
@@ -100,13 +109,26 @@ public class ChooseImagesActivity extends AppCompatActivity {
     }
 
     public  void onClickMainImage(View view){
+        if(!isImagesLoaded) {
+            Toast.makeText(this, "Loading images, please wait", Toast.LENGTH_LONG).show();
+            return;
+        }
         getImage(1);
     }
     public  void onClickImage2(View view){
+        if(!isImagesLoaded) {
+            Toast.makeText(this, "Loading images, please wait", Toast.LENGTH_LONG).show();
+            return;
+        }
         getImage(2);
     }
     public  void onClickImage3(View view){
+        if(!isImagesLoaded) {
+            Toast.makeText(this, "Loading images, please wait", Toast.LENGTH_LONG).show();
+            return;
+        }
         getImage(3);
+
     }
 
     //кагда добавляем картинку, для этого запускаем интэнт и ждем результата, чтобы он нам выдал ссылку на картинку которую мы выбрали
@@ -122,29 +144,32 @@ public class ChooseImagesActivity extends AppCompatActivity {
         if(i != null){
 
 
-             uris[0] = i.getStringExtra(MyConstants.IMAGE_ID);
-             uris[1] = i.getStringExtra(MyConstants.IMAGE_ID_2);
+            uris[0] = i.getStringExtra(MyConstants.IMAGE_ID);
+            uris[1] = i.getStringExtra(MyConstants.IMAGE_ID_2);
             uris[2] = i.getStringExtra(MyConstants.IMAGE_ID_3);
-            setImages(uris);
+            isImagesLoaded = false;
+            imagesManager.resizeMultiLargeImages(sortImages(uris));
         }
     }
 
-    private void setImages(String[] uris){
+    private List<String> sortImages(String[] uris){
+
+        List<String> tempList = new ArrayList<>();
 
         for(int i = 0; i < uris.length; i++ ){
-            if(!uris[i].equals("empty"))  showImages(uris[i], i);
+           if(uris[i].startsWith("http")){
+                showHttpImages(uris[i], i);
+                tempList.add("empty");
+           } else{
+               tempList.add(uris[i]);
+           }
         }
-
-
+        return tempList;
     }
 
-    private void showImages(String uri, int position){
-        if(uri.startsWith("http")){
+    private void showHttpImages(String uri, int position){
+
             Picasso.get().load(uri).into(imagesViews[position]);
-        }
-        else{
-            imagesViews[position].setImageURI(Uri.parse(uri));
-        }
     }
 
 

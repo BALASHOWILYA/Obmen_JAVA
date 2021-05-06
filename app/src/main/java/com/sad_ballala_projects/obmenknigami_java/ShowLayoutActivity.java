@@ -77,6 +77,8 @@ public class ShowLayoutActivity extends AppCompatActivity {
                 if(!s.equals("empty"))
                 {imagesUris.add(s);}
             }
+
+            imageAdapter.setFireBaseUri(true);
             imageAdapter.updateImages(imagesUris);
             String dataText;
             if(imagesUris.size() > 0)

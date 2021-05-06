@@ -10,6 +10,8 @@ import com.squareup.picasso.Picasso;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImagesManager {
 
@@ -18,11 +20,14 @@ public class ImagesManager {
     private int width;
     private int height;
     private OnBitMapLoaded onBitMapLoaded;
-    private int imageIndex = 0;
+
+    private List<Bitmap> bmList;
+
 
     public ImagesManager(Context context, OnBitMapLoaded onBitMapLoaded) {
         this.context = context;
         this.onBitMapLoaded = onBitMapLoaded;
+        bmList = new ArrayList<>();
     }
 
     public static Bitmap resizeImage(Bitmap image, int maxSize){
@@ -64,29 +69,48 @@ public class ImagesManager {
         return size;
     }
 
-    public void resizeLargeImage(final String uri){
-        width = getImageSize(uri)[0];
-        height = getImageSize(uri)[1];
-        float imageRatio = (float)width / (float)height;
-        if(imageRatio > 1){
-            if(width > MAX_SIZE) {
-                width = MAX_SIZE;
-                height = (int) (width / imageRatio);
-            }
 
-        } else {
-            if(height > MAX_SIZE) {
-                height = MAX_SIZE;
-                width = (int)(height * imageRatio);
+
+    public void resizeMultiLargeImages(final List<String> uris) {
+        final List<int[]> sizeList = new ArrayList<>();
+        for(int i = 0; i < uris.size(); i++){
+
+            width = getImageSize(uris.get(i))[0];
+            height = getImageSize(uris.get(i))[1];
+            float imageRatio = (float)width / (float)height;
+            if(imageRatio > 1){
+                if(width > MAX_SIZE) {
+                    width = MAX_SIZE;
+                    height = (int) (width / imageRatio);
+                }
+
+            } else {
+                if(height > MAX_SIZE) {
+                    height = MAX_SIZE;
+                    width = (int)(height * imageRatio);
+                }
             }
+            sizeList.add(new int[]{width,height});
+
         }
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Bitmap bm = Picasso.get().load(uri).resize(width,height).get();
-                    onBitMapLoaded.onBitMapLoaded(bm, imageIndex );
+
+                    bmList.clear();
+                    for(int i= 0; i < sizeList.size(); i++) {
+                        if(!uris.get(i).equals("empty")) {
+
+                            Bitmap bm = Picasso.get().load(uris.get(i)).resize(sizeList.get(i)[0], sizeList.get(i)[1]).get();
+                            bmList.add(bm);
+                        } else{
+                            bmList.add(null);
+                        }
+                    }
+                    onBitMapLoaded.onBitMapLoaded(bmList);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -94,7 +118,4 @@ public class ImagesManager {
         }).start();
     }
 
-    public void setImageIndex(int imageIndex) {
-        this.imageIndex = imageIndex;
-    }
 }
